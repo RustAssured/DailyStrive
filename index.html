@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DailyStrive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a1a; --muted: #6b6b6b; --hint: #9b9b9b;
+      --surface: #ffffff; --lift: #f5f4f0; --bg: #faf9f6;
+      --border: rgba(0,0,0,0.1); --border-mid: rgba(0,0,0,0.2);
+      --green: #2D6A4F; --green-l: #D8F3DC; --green-d: #1B4332;
+      --amber: #E76F00; --amber-l: #FFF3E0; --r: 14px;
+    }
+    body { font-family: 'Instrument Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; display: flex; justify-content: center; padding: 0; }
+    .app { width: 100%; max-width: 480px; min-height: 100vh; display: flex; flex-direction: column; padding: 2rem 1.5rem 3rem; }
+    .wordmark { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; color: var(--ink); display: flex; align-items: center; gap: 7px; margin-bottom: 2.5rem; }
+    .wordmark-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .progress-wrap { margin-bottom: 2.25rem; }
+    .progress-track { display: flex; gap: 4px; margin-bottom: 0.5rem; }
+    .p-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background 0.4s; }
+    .p-seg.done { background: var(--green); }
+    .p-seg.active { background: var(--ink); }
+    .progress-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--hint); }
+    .screen { display: none; flex: 1; flex-direction: column; }
+    .screen.active { display: flex; animation: rise 0.3s ease forwards; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .q-meta { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.6rem; }
+    .q-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 0.6rem; }
+    .q-sub { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 2rem; }
+    textarea { width: 100%; font-family: 'Instrument Sans', sans-serif; font-size: 15px; padding: 14px 16px; border: 0.5px solid var(--border-mid); border-radius: var(--r); background: var(--surface); color: var(--ink); resize: none; line-height: 1.65; outline: none; transition: border-color 0.2s; margin-bottom: 1.25rem; -webkit-appearance: none; }
+    textarea:focus { border-color: var(--ink); }
+    textarea::placeholder { color: var(--hint); }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+    .opt { display: flex; align-items: flex-start; gap: 13px; padding: 15px 16px; border: 0.5px solid var(--border); border-radius: var(--r); cursor: pointer; transition: all 0.18s; background: var(--surface); user-select: none; -webkit-tap-highlight-color: transparent; }
+    .opt:active { transform: scale(0.99); }
+    .opt:hover { border-color: var(--border-mid); background: var(--lift); }
+    .opt.selected { border-color: var(--ink); background: var(--lift); }
+    .opt-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border-mid); flex-shrink: 0; margin-top: 1px; position: relative; transition: all 0.18s; }
+    .opt.selected .opt-dot { background: var(--ink); border-color: var(--ink); }
+    .opt.selected .opt-dot::after { content: ''; position: absolute; width: 6px; height: 6px; border-radius: 50%; background: white; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .opt-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; line-height: 1.3; }
+    .opt-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .btn { width: 100%; padding: 15px 20px; border-radius: var(--r); font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.03em; cursor: pointer; transition: all 0.15s; border: none; -webkit-tap-highlight-color: transparent; }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.28; cursor: not-allowed; }
+    .btn-primary { background: var(--ink); color: white; }
+    .btn-primary:hover:not(:disabled) { background: #2d2d2d; }
+    .welcome-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 1rem 0 2rem; }
+    .welcome-tag { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 1.5rem; }
+    .welcome-title { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 1rem; }
+    .welcome-body { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 2.5rem; }
+    .promise-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2.5rem; }
+    .promise-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+    .promise-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .loading-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2rem 0; }
+    .loading-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .loading-sub { font-size: 14px; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+    .dots { display: flex; gap: 7px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-mid); animation: blink 1.3s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%,100% { opacity: 0.25; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+    .result-tag { display: inline-flex; align-items: center; gap: 6px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 11px; border-radius: 20px; background: var(--green-l); color: var(--green-d); margin-bottom: 1.25rem; }
+    .result-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 0.4rem; }
+    .result-tagline { font-size: 14px; color: var(--muted); font-style: italic; margin-bottom: 1.75rem; line-height: 1.5; }
+    .rblock { border: 0.5px solid var(--border); border-radius: var(--r); padding: 1.1rem 1.25rem; margin-bottom: 0.875rem; background: var(--surface); }
+    .rblock.hl { background: var(--lift); }
+    .rblock-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.5rem; }
+    .rblock-text { font-size: 14px; line-height: 1.7; color: var(--ink); }
+    .rblock-text.nudge { font-style: italic; color: var(--muted); font-size: 15px; }
+    .divider { border: none; border-top: 0.5px solid var(--border); margin: 1.25rem 0; }
+    .section-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.75rem; }
+    .action-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+    .action-item { display: flex; gap: 11px; font-size: 14px; line-height: 1.6; align-items: flex-start; }
+    .action-n { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--hint); min-width: 20px; padding-top: 3px; }
+    .cta-block { background: var(--lift); border-radius: var(--r); padding: 1.25rem; margin-top: 0.5rem; }
+    .cta-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 0.35rem; }
+    .cta-sub { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 1rem; }
+    .error-box { background: #fff5f5; border: 0.5px solid #ffcccc; border-radius: var(--r); padding: 1rem 1.1rem; font-size: 13px; color: #cc2222; line-height: 1.55; margin-bottom: 1rem; }
+    .check-row { display: flex; gap: 8px; margin-top: 1.25rem; }
+    .check-btn { flex: 1; padding: 12px 6px; border-radius: var(--r); font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; cursor: pointer; border: 0.5px solid var(--border-mid); background: var(--surface); color: var(--muted); transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+    .check-btn:active { transform: scale(0.97); }
+    .check-btn.sel { background: var(--ink); color: white; border-color: var(--ink); }
+    .saved-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 2rem 0; }
+    .saved-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--green-l); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+    .saved-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .saved-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 2rem; max-width: 300px; margin-left: auto; margin-right: auto; }
+    .log-entry { text-align: left; border-left: 2px solid var(--green); padding: 0.5rem 0 0.5rem 0.875rem; margin-bottom: 0.75rem; }
+    .log-day-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--hint); margin-bottom: 3px; }
+    .log-text { font-size: 13px; color: var(--ink); line-height: 1.55; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="wordmark"><div class="wordmark-dot"></div>DailyStrive</div>
+  <div class="progress-wrap" id="pwrap" style="display:none;">
+    <div class="progress-track" id="ptrack"></div>
+    <div class="progress-label" id="plabel"></div>
+  </div>
+
+  <!-- S0: Welcome -->
+  <div class="screen active" id="s0">
+    <div class="welcome-hero">
+      <div class="welcome-tag">Voor wie iets wil opbouwen</div>
+      <div class="welcome-title">De kleinste stap die je vandaag wél gaat zetten.</div>
+      <div class="welcome-body">DailyStrive leert waar jij vastloopt. En geeft je elke dag precies de stap die haalbaar voelt én betekenisvol is.</div>
+      <div class="promise-list">
+        <div class="promise-item"><div class="promise-dot"></div><span>Geen businessplan. Eén stap per dag.</span></div>
+        <div class="promise-item"><div class="promise-dot"></div><span>Aangepast aan hoe jij werkt en beweegt.</span></div>
+        <div class="promise-item"><div class="promise-dot"></div><span>Zachte accountability — geen druk.</span></div>
+      </div>
+      <button class="btn btn-primary" onclick="goTo(1)">Beginnen →</button>
+    </div>
+  </div>
+
+  <!-- S1: Energie -->
+  <div class="screen" id="s1">
+    <div class="q-meta">Vraag 1 van 7 — Energie</div>
+    <div class="q-title">Waar praat je makkelijk over — ook als niemand erom vraagt?</div>
+    <div class="q-sub">Denk aan onderwerpen of problemen waar je informeel al autoriteit over hebt. Geen CV — gewoon eerlijk.</div>
+    <textarea id="q1" rows="4" placeholder="Bijv. 'teamdynamiek in verandertrajecten' of 'hoe kleine ondernemers zichzelf vastzetten'" oninput="onText('q1','b1')"></textarea>
+    <button class="btn btn-primary" id="b1" onclick="goTo(2)" disabled>Volgende →</button>
+  </div>
+
+  <!-- S2: Frictie -->
+  <div class="screen" id="s2">
+    <div class="q-meta">Vraag 2 van 7 — Frictie</div>
+    <div class="q-title">Wat stel je het vaakst uit als het gaat om je eigen projecten?</div>
+    <div class="q-sub">Wees eerlijk. Dit is geen beoordeling — het is informatie die het systeem gebruikt om jou beter te helpen.</div>
+    <div class="options" id="o2">
+      <div class="opt" onclick="pickOpt(2,0,this)"><div class="opt-dot"></div><div><div class="opt-title">Beginnen. Ik denk te lang na voor ik iets doe.</div><div class="opt-desc">Plannen en research voelen veiliger dan starten.</div></div></div>
+      <div class="opt" onclick="pickOpt(2,1,this)"><div class="opt-dot"></div><div><div class="opt-title">Doorgaan. Ik start goed maar verdwijn dan.</div><div class="opt-desc">Het leven gaat voor, en terugkomen voelt zwaar.</div></div></div>
+      <div class="opt" onclick="pickOpt(2,2,this)"><div class="opt-dot"></div><div><div class="opt-title">Zichtbaar zijn. Ik bouw liever dan dat ik mezelf laat zien.</div><div class="opt-desc">LinkedIn posts, pitchen, gesprekken aanknopen — dat stel ik uit.</div></div></div>
+      <div class="opt" onclick="pickOpt(2,3,this)"><div class="opt-dot"></div><div><div class="opt-title">Afronden. Ik begin veel maar maak weinig af.</div><div class="opt-desc">Energie komt in golven. Nieuwe ideeën winnen het van oude.</div></div></div>
+    </div>
+    <button class="btn btn-primary" id="b2" onclick="goTo(3)" disabled>Volgende →</button>
+  </div>
+
+  <!-- S3: Patroon -->
+  <div class="screen" id="s3">
+    <div class="q-meta">Vraag 3 van 7 — Patroon</div>
+    <div class="q-title">Hoe gaat het meestal als je ergens mee begint? Wat gebeurt er na de eerste week?</div>
+    <div class="q-sub">Geen mooie versie. Gewoon wat er écht gebeurt. Dit is de meest waardevolle informatie.</div>
+    <textarea id="q3" rows="4" placeholder="Bijv. 'De eerste dagen gaat het goed, daarna komt het leven ertussen en verlies ik de draad'" oninput="onText('q3','b3')"></textarea>
+    <button class="btn btn-primary" id="b3" onclick="goTo(4)" disabled>Volgende →</button>
+  </div>
+
+  <!-- S4: Tijd -->
+  <div class="screen" id="s4">
+    <div class="q-meta">Vraag 4 van 7 — Realiteit</div>
+    <div class="q-title">Hoeveel tijd kun je hier realistisch aan besteden?</div>
+    <div class="q-sub">Niet wat je zou willen — wat er echt in zit. DailyStrive past de stapgrootte aan jouw tempo aan.</div>
+    <div class="options" id="o4">
+      <div class="opt" onclick="pickOpt(4,0,this)"><div class="opt-dot"></div><div><div class="opt-title">Minder dan 3 uur per week</div><div class="opt-desc">Kleine beetjes, tussendoor. Dat is genoeg om mee te beginnen.</div></div></div>
+      <div class="opt" onclick="pickOpt(4,1,this)"><div class="opt-dot"></div><div><div class="opt-title">3 tot 8 uur per week</div><div class="opt-desc">Ik maak er echt tijd voor vrij, maar het is niet mijn hoofdwerk.</div></div></div>
+      <div class="opt" onclick="pickOpt(4,2,this)"><div class="opt-dot"></div><div><div class="opt-title">Meer dan 8 uur per week</div><div class="opt-desc">Dit wordt een serieuze prioriteit voor mij.</div></div></div>
+    </div>
+    <button class="btn btn-primary" id="b4" onclick="goTo(5)" disabled>Volgende →</button>
+  </div>
+
+  <!-- S5: Tech -->
+  <div class="screen" id="s5">
+    <div class="q-meta">Vraag 5 van 7 — Werkstijl</div>
+    <div class="q-title">Hoe comfortabel ben je met digitale tools?</div>
+    <div class="q-sub">Dit bepaalt welke acties haalbaar zijn voor jou. Geen goed of fout antwoord.</div>
+    <div class="options" id="o5">
+      <div class="opt" onclick="pickOpt(5,0,this)"><div class="opt-dot"></div><div><div class="opt-title">Ik gebruik apps maar bouw niks zelf</div><div class="opt-desc">WhatsApp, LinkedIn, misschien ChatGPT. Prima startpunt.</div></div></div>
+      <div class="opt" onclick="pickOpt(5,1,this)"><div class="opt-dot"></div><div><div class="opt-title">Ik experimenteer graag</div><div class="opt-desc">Nieuwe tools uitproberen vind ik leuk. Ik leer snel bij.</div></div></div>
+      <div class="opt" onclick="pickOpt(5,2,this)"><div class="opt-dot"></div><div><div class="opt-title">Ik kan zelf dingen bouwen of aanpassen</div><div class="opt-desc">Code, tools instellen, systemen opzetten — vertrouwd terrein.</div></div></div>
+    </div>
+    <button class="btn btn-primary" id="b5" onclick="goTo(6)" disabled>Volgende →</button>
+  </div>
+
+  <!-- S6: Richting -->
+  <div class="screen" id="s6">
+    <div class="q-meta">Vraag 6 van 7 — Richting</div>
+    <div class="q-title">Wat wil je liever?</div>
+    <div class="q-sub">Beide zijn eerlijk en beide werken. Ze leiden naar andere routes en een ander tempo.</div>
+    <div class="options" id="o6">
+      <div class="opt" onclick="pickOpt(6,0,this)"><div class="opt-dot"></div><div><div class="opt-title">Snel iets verdienen met wat ik al kan</div><div class="opt-desc">Binnen weken iets opleveren op basis van bestaande kennis.</div></div></div>
+      <div class="opt" onclick="pickOpt(6,1,this)"><div class="opt-dot"></div><div><div class="opt-title">Iets bouwen dat over twee jaar nog staat</div><div class="opt-desc">Een systeem, product of praktijk. Mag langer duren.</div></div></div>
+    </div>
+    <button class="btn btn-primary" id="b6" onclick="goTo(7)" disabled>Volgende →</button>
+  </div>
+
+  <!-- S7: Echte reden -->
+  <div class="screen" id="s7">
+    <div class="q-meta">Vraag 7 van 7 — De echte reden</div>
+    <div class="q-title">Wat heeft je tot nu toe tegengehouden?</div>
+    <div class="q-sub">Dit is de belangrijkste vraag. Niet de nette versie — de echte. Je antwoord hier bepaalt je eerste stap.</div>
+    <textarea id="q7" rows="4" placeholder="Bijv. 'Ik weet niet waar te beginnen' of 'Ik begin altijd maar maak nooit af'" oninput="onText('q7','b7')"></textarea>
+    <button class="btn btn-primary" id="b7" onclick="generateNudge()" disabled>Mijn eerste stap ophalen →</button>
+  </div>
+
+  <!-- S8: Loading -->
+  <div class="screen" id="s8">
+    <div class="loading-wrap">
+      <div class="q-meta">Analyse</div>
+      <div class="loading-title">We kijken wat bij jou past.</div>
+      <div class="loading-sub">DailyStrive bepaalt je frictieprofiel en eerste stap op basis van jouw antwoorden.</div>
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- S9: Resultaat -->
+  <div class="screen" id="s9">
+    <div class="result-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Jouw eerste stap</div>
+    <div class="result-title" id="r-title">—</div>
+    <div class="result-tagline" id="r-tagline">—</div>
+    <div class="rblock hl"><div class="rblock-label">De nudge van dag 1</div><div class="rblock-text nudge" id="r-nudge">—</div></div>
+    <div class="rblock"><div class="rblock-label">Waarom dit bij jou past</div><div class="rblock-text" id="r-why">—</div></div>
+    <div class="divider"></div>
+    <div class="section-label">Deze week doe je dit</div>
+    <ul class="action-list" id="r-actions"></ul>
+    <div class="rblock"><div class="rblock-label">De vraag die alles bepaalt</div><div class="rblock-text" id="r-question">—</div></div>
+    <div class="cta-block">
+      <div class="cta-title">Sprint 1 begint nu.</div>
+      <div class="cta-sub">DailyStrive onthoudt je voortgang en past de volgende stap aan op wat jij teruggeeft.</div>
+      <button class="btn btn-primary" onclick="startSprint()">Start sprint 1 →</button>
+    </div>
+  </div>
+
+  <!-- S10: Dag 1 -->
+  <div class="screen" id="s10">
+    <div class="q-meta">Sprint 1 — Dag 1</div>
+    <div class="q-title" style="margin-bottom:1.5rem;">Jouw stap van vandaag.</div>
+    <div class="rblock hl" style="margin-bottom:1.5rem;"><div class="rblock-label">Doe dit nu</div><div class="rblock-text nudge" id="day1-nudge">—</div></div>
+    <div class="q-meta" style="margin-bottom:0.5rem;">Reflectie (optioneel)</div>
+    <textarea id="day1-ref" rows="3" placeholder="Wat merkte je? Wat lukte of lukte niet? Geen druk." style="margin-bottom:1rem;"></textarea>
+    <div class="q-meta" style="margin-bottom:0.625rem;">Hoe ging het?</div>
+    <div class="check-row">
+      <button class="check-btn" id="cb-done" onclick="selectCheck('done')">✓ Gedaan</button>
+      <button class="check-btn" id="cb-partial" onclick="selectCheck('partial')">~ Gedeeltelijk</button>
+      <button class="check-btn" id="cb-no" onclick="selectCheck('no')">— Niet nu</button>
+    </div>
+    <div style="margin-top:1.5rem;"><button class="btn btn-primary" id="b-save" onclick="saveDay1()" disabled>Dag 1 opslaan</button></div>
+  </div>
+
+  <!-- S11: Opgeslagen -->
+  <div class="screen" id="s11">
+    <div class="saved-wrap">
+      <div class="saved-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D6A4F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="saved-title" id="st">Dag 1 gedaan.</div>
+      <div class="saved-sub" id="ss">Je reflectie is opgeslagen. Morgen bouwt DailyStrive hier op verder.</div>
+    </div>
+    <div style="text-align:left;">
+      <div class="section-label">Jouw logboek</div>
+      <div id="logboek"></div>
+    </div>
+  </div>
+
+</div>
+<script>
+  const TOTAL = 7;
+  let cur = 0;
+  const A = { q1:'', frictie:-1, q3:'', tijd:-1, tech:-1, richting:-1, q7:'' };
+  let profiel = '';
+  let result = null;
+  let checkStatus = null;
+
+  function showProg(n) {
+    document.getElementById('pwrap').style.display = 'block';
+    const t = document.getElementById('ptrack');
+    t.innerHTML = '';
+    for (let i=1;i<=TOTAL;i++) {
+      const s = document.createElement('div');
+      s.className = 'p-seg' + (i<n?' done':i===n?' active':'');
+      t.appendChild(s);
+    }
+    document.getElementById('plabel').textContent = `Vraag ${n} van ${TOTAL}`;
+  }
+
+  function goTo(n) {
+    document.getElementById('s'+cur).classList.remove('active');
+    cur = n;
+    document.getElementById('s'+n).classList.add('active');
+    window.scrollTo(0,0);
+    if (n>=1 && n<=7) showProg(n);
+    else document.getElementById('pwrap').style.display='none';
+  }
+
+  function onText(fid, bid) {
+    const v = document.getElementById(fid).value.trim();
+    if (fid==='q1') A.q1=v;
+    if (fid==='q3') A.q3=v;
+    if (fid==='q7') A.q7=v;
+    document.getElementById(bid).disabled = v.length < 8;
+  }
+
+  function pickOpt(sc, idx, el) {
+    document.getElementById('o'+sc).querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+    if (sc===2) A.frictie=idx;
+    if (sc===4) A.tijd=idx;
+    if (sc===5) A.tech=idx;
+    if (sc===6) A.richting=idx;
+    document.getElementById('b'+sc).disabled=false;
+  }
+
+  const profielMap = {
+    0: { key:'overdenker', label:'Overdenker', omschrijving:'Deze persoon denkt lang na voor ze begint. Perfectionisme en research zijn hun bescherming. Ze hebben een onweerlegbaar kleine eerste stap nodig — zo klein dat er geen reden is om niet te beginnen.', vermijden:'Grote open vragen, meerdere opties tegelijk, taal als "maak een plan" of "denk na over."', toon:'Direct en warm. Geen poespas. Eén ding. Nu.' },
+    1: { key:'verdwijner', label:'Verdwijner', omschrijving:'Deze persoon begint goed maar verdwijnt als het leven druk wordt. Schuldgevoel over afhaken maakt terugkomen moeilijker. Ze hebben zachte doorgang en een lage drempel nodig.', vermijden:'Streaks benadrukken, schuldtaal, vragen naar wat er niet gelukt is.', toon:'Warm en permissief. "Je bent er. Dat is genoeg."' },
+    2: { key:'zichtbaarheidsschuwe', label:'Zichtbaarheidsschuwe', omschrijving:'Deze persoon bouwt liever dan dat ze zichzelf laten zien. Zichtbaarheid voelt als performance. Ze hebben micro-stappen richting de markt nodig die niet voelen als "jezelf verkopen."', vermijden:'Directe verkooptaal, "maak een LinkedIn post", "pitch jezelf."', toon:'Zachtjes uitdagend. "Dit voelt groter dan het is."' },
+    3: { key:'energielekkende_starter', label:'Energielekkende starter', omschrijving:'Deze persoon werkt in golven. Veel begonnen, weinig afgemaakt. Ze hebben ritme nodig dat past bij hun energie-architectuur, niet lineaire verplichtingen.', vermijden:'Lange commitments, zware dagelijkse plichten, suggestie dat consistentie = elke dag hetzelfde.', toon:'Energetisch als er een golf is, zachter als er een dal is.' }
+  };
+
+  const tijdLabels = ['minder dan 3 uur per week — acties moeten ultra-klein zijn, max 5-10 minuten', '3 tot 8 uur per week — acties mogen 15-30 minuten duren', 'meer dan 8 uur per week — acties mogen 30-60 minuten duren'];
+  const techLabels = ['gebruikt geen tools en bouwt niets zelf — acties mogen absoluut geen code of technische stappen bevatten, denk: bellen, schrijven, een gesprek voeren', 'experimenteert graag — acties mogen verwijzen naar simpele no-code tools zoals Notion, Typeform, Canva', 'technisch vaardig — acties mogen verwijzen naar tools bouwen, APIs, of systemen opzetten'];
+  const richtingLabels = ['snel geld verdienen met bestaande kennis — focus op diensten die morgen al aangeboden kunnen worden', 'iets bouwen dat blijft — focus op een schaalbaar systeem of product, mag langer duren'];
+
+  async function generateNudge() {
+    A.q7 = document.getElementById('q7').value.trim();
+    const p = profielMap[A.frictie] || profielMap[0];
+    profiel = p.key;
+    goTo(8);
+
+    const prompt = `Je bent een warme, directe en eerlijke coach voor solo professionals. Je schrijft alsof je deze persoon echt kent. Geen generieke adviezen. Geen buzzwords. Geen motivational poster taal.
+
+GEBRUIKERSPROFIEL:
+Energie en expertise: "${A.q1}"
+Frictiepatroon (${p.label}): ${p.omschrijving}
+Wat vermijden in nudge: ${p.vermijden}
+Gewenste toon: ${p.toon}
+Patroon bij starten: "${A.q3}"
+Beschikbare tijd: ${tijdLabels[A.tijd]}
+Technisch comfort: ${techLabels[A.tech]}
+Richting: ${richtingLabels[A.richting]}
+Diepste blokkade: "${A.q7}"
+
+INSTRUCTIES:
+1. Bedenk het meest logische eerste businessconcept specifiek voor DEZE persoon op basis van hun expertise.
+2. De nudge moet zo klein zijn dat er geen reden is om het niet te doen. Max 10 minuten. Concreet. Verwijs naar hun expertise of blokkade.
+3. Spreek de persoon direct aan met 'je' en 'jij'.
+4. De drie acties zijn oplopend: ultra-klein (max 10 min) → klein (15-30 min) → richting eerste extern contact.
+5. De eerste_vraag is scherp en persoonlijk. Eén zin.
+
+Geef ALLEEN dit JSON zonder markdown:
+{
+  "titel": "Naam van het businessconcept (max 8 woorden, concreet)",
+  "tagline": "Wat je precies doet en voor wie (max 12 woorden)",
+  "nudge": "De eerste stap van vandaag. Ultra-klein. Uitvoerbaar in 5-10 minuten. Persoonlijk en concreet. (2-3 zinnen)",
+  "waarom": "Waarom dit specifiek bij deze persoon past. Verwijs naar hun werk, frictie en situatie. Eerlijk. (3-4 zinnen)",
+  "acties": [
+    "Actie 1 — ultra-klein, vandaag, max 10 minuten",
+    "Actie 2 — klein, deze week, 15-30 minuten",
+    "Actie 3 — richting validatie of eerste extern contact"
+  ],
+  "eerste_vraag": "De kernvraag die alles bepaalt voor deze persoon. Eén scherpe zin."
+}`;
+
+    try {
+      const res = await fetch('/api/nudge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1200, messages: [{ role: 'user', content: prompt }] })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message);
+      const parsed = JSON.parse(data.content[0].text.trim().replace(/```json|```/g,'').trim());
+      result = parsed;
+      save('profile', A); save('profiel', profiel); save('result', parsed);
+
+      document.getElementById('r-title').textContent = parsed.titel;
+      document.getElementById('r-tagline').textContent = parsed.tagline;
+      document.getElementById('r-nudge').textContent = parsed.nudge;
+      document.getElementById('r-why').textContent = parsed.waarom;
+      document.getElementById('r-question').textContent = parsed.eerste_vraag;
+
+      const list = document.getElementById('r-actions');
+      list.innerHTML = '';
+      parsed.acties.forEach((a,i) => {
+        const li = document.createElement('li');
+        li.className = 'action-item';
+        li.innerHTML = `<span class="action-n">0${i+1}</span><span>${a}</span>`;
+        list.appendChild(li);
+      });
+      goTo(9);
+    } catch(err) {
+      const s7 = document.getElementById('s7');
+      const ex = s7.querySelector('.error-box'); if (ex) ex.remove();
+      const e = document.createElement('div');
+      e.className = 'error-box';
+      e.textContent = `Er ging iets mis: ${err.message}. Controleer of je Vercel environment variable correct is ingesteld en probeer opnieuw.`;
+      s7.insertBefore(e, s7.firstChild);
+      goTo(7);
+    }
+  }
+
+  function startSprint() {
+    document.getElementById('day1-nudge').textContent = result ? result.nudge : '—';
+    goTo(10);
+  }
+
+  function selectCheck(s) {
+    checkStatus = s;
+    ['done','partial','no'].forEach(x => document.getElementById('cb-'+x).classList.remove('sel'));
+    document.getElementById('cb-'+s).classList.add('sel');
+    document.getElementById('b-save').disabled = false;
+  }
+
+  function saveDay1() {
+    const ref = document.getElementById('day1-ref').value.trim();
+    const log = load('log') || [];
+    log.push({ dag:1, datum: new Date().toLocaleDateString('nl-NL'), status: checkStatus, reflectie: ref, nudge: result ? result.nudge : '' });
+    save('log', log);
+
+    const titels = { done:'Dag 1 gedaan.', partial:'Dag 1 gedeeltelijk.', no:'Je was er.' };
+    const subs = { done:'Je hebt momentum. Morgen bouwt DailyStrive hier op verder.', partial:'Gedeeltelijk is ook bewegen. Morgen een nieuwe kans.', no:'Aanwezig zijn telt. Morgen is er weer.' };
+    document.getElementById('st').textContent = titels[checkStatus] || 'Opgeslagen.';
+    document.getElementById('ss').textContent = subs[checkStatus] || '';
+
+    const logEl = document.getElementById('logboek');
+    logEl.innerHTML = log.map(e => `
+      <div class="log-entry">
+        <div class="log-day-label">Dag ${e.dag} — ${e.datum} — ${e.status==='done'?'Gedaan':e.status==='partial'?'Gedeeltelijk':'Aanwezig'}</div>
+        <div class="log-text">${e.reflectie || '<span style="color:var(--hint);font-style:italic;">Geen reflectie toegevoegd.</span>'}</div>
+      </div>`).join('');
+    goTo(11);
+  }
+
+  function save(k,v) { try { localStorage.setItem('ds_'+k, JSON.stringify(v)); } catch(e){} }
+  function load(k) { try { return JSON.parse(localStorage.getItem('ds_'+k)); } catch(e){ return null; } }
+
+  (function init() { const s = load('result'); if (s) result = s; })();
+</script>
+</body>
+</html>
