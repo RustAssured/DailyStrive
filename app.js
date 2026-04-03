@@ -2,6 +2,7 @@
 const DAYS = 7;
 let currentScreen = 0;
 const answers = {};
+let nextDayNumber = 0;
 
 // ─── Navigation ─────────────────────────────────────────────────────────────
 function goTo(n) {
@@ -43,13 +44,23 @@ function saveDay(n) {
   answers['dag' + n] = val;
   save('answers', answers);
 
-  document.getElementById('done-title').textContent = 'Dag ' + n + ' opgeslagen.';
+  document.getElementById('done-title').textContent = 'Dag ' + n + ' afgerond.';
   document.getElementById('done-sub').textContent = n < DAYS
-    ? 'Morgen is dag ' + (n + 1) + '. Eén nieuwe vraag.'
+    ? 'Er wacht een volgende stap, wanneer jij er klaar voor bent.'
     : 'Je hebt alle zeven dagen gedaan.';
+
+  nextDayNumber = n < DAYS ? n + 1 : 0;
+  const nextWrap = document.getElementById('next-day-wrap');
+  if (nextWrap) nextWrap.style.display = nextDayNumber > 0 ? 'block' : 'none';
 
   renderLog();
   goTo(12);
+}
+
+function goToNextDay() {
+  if (nextDayNumber > 0 && nextDayNumber <= DAYS) {
+    goTo(nextDayNumber);
+  }
 }
 
 // ─── Render logboek ──────────────────────────────────────────────────────────
@@ -58,7 +69,7 @@ function renderLog() {
   const all = load('answers') || {};
   const entries = Object.entries(all).filter(([k]) => k.startsWith('dag'));
   if (entries.length === 0) { logEl.innerHTML = ''; return; }
-  logEl.innerHTML = entries.map(([k, v]) =>
+  logEl.innerHTML = '<div class="log-label" style="margin-bottom: 1rem;">Wat je tot nu toe hebt opgeschreven</div>' + entries.map(([k, v]) =>
     '<div class="log-entry">' +
       '<div class="log-label">' + k.replace('dag', 'Dag ') + '</div>' +
       '<div class="log-text">' + v + '</div>' +
@@ -120,8 +131,8 @@ function saveActieDay1() {
   const val = document.getElementById('a13').value.trim();
   answers['actie_dag1'] = val;
   save('answers', answers);
-  document.getElementById('done-title').textContent = 'Goed begin.';
-  document.getElementById('done-sub').textContent = 'Morgen is er één kleine actie. Meer niet.';
+  document.getElementById('done-title').textContent = 'Eerste stap gezet.';
+  document.getElementById('done-sub').textContent = 'Er wacht een volgende stap, wanneer jij er klaar voor bent.';
   document.getElementById('log-wrap').innerHTML =
     '<div class="log-entry">' +
       '<div class="log-label">Dag 1</div>' +

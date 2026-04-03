@@ -41,51 +41,51 @@
     <div class="day-label">Dag 1 van 7</div>
     <div class="q">Waar praat je makkelijk over — ook als niemand erom vraagt?</div>
     <textarea id="a1" rows="4" placeholder="Schrijf gewoon wat er opkomt. Niet perfect." oninput="chk('a1','b1')"></textarea>
-    <p class="opt-note">Neem de tijd die je nodig hebt.</p>
-    <button class="btn btn-dark" id="b1" onclick="saveDay(1)" disabled>Opslaan →</button>
+    <p class="opt-note">Geen haast.</p>
+    <button class="btn btn-dark" id="b1" onclick="saveDay(1)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s2">
     <div class="day-label">Dag 2 van 7</div>
     <div class="q">Wanneer vroeg iemand jou voor het laatst om hulp? <span class="q-soft">Waar ging dat over?</span></div>
     <textarea id="a2" rows="4" placeholder="Het hoeft niet recent te zijn." oninput="chk('a2','b2')"></textarea>
-    <button class="btn btn-dark" id="b2" onclick="saveDay(2)" disabled>Opslaan →</button>
+    <button class="btn btn-dark" id="b2" onclick="saveDay(2)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s3">
     <div class="day-label">Dag 3 van 7</div>
     <div class="q">Wat doe jij hierin op jouw manier — anders dan anderen?</div>
     <textarea id="a3" rows="4" placeholder="Geen grote claim nodig. Gewoon eerlijk." oninput="chk('a3','b3')"></textarea>
-    <button class="btn btn-dark" id="b3" onclick="saveDay(3)" disabled>Opslaan →</button>
+    <button class="btn btn-dark" id="b3" onclick="saveDay(3)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s4">
     <div class="day-label">Dag 4 van 7</div>
     <div class="q">Stel: iemand zit hiermee vast. <span class="q-soft">Wat zeg jij als eerste?</span></div>
     <textarea id="a4" rows="4" placeholder="Schrijf het op zoals je het zou zeggen." oninput="chk('a4','b4')"></textarea>
-    <button class="btn btn-dark" id="b4" onclick="saveDay(4)" disabled>Opslaan →</button>
+    <button class="btn btn-dark" id="b4" onclick="saveDay(4)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s5">
     <div class="day-label">Dag 5 van 7</div>
     <div class="q">Schrijf één zin zoals je het aan één persoon zou uitleggen.</div>
     <textarea id="a5" rows="3" placeholder="Niet perfect. Gewoon een eerste poging." oninput="chk('a5','b5')"></textarea>
-    <p class="opt-note">Eén zin is meer dan genoeg.</p>
-    <button class="btn btn-dark" id="b5" onclick="saveDay(5)" disabled>Opslaan →</button>
+    <p class="opt-note">Eén zin. Meer hoeft niet.</p>
+    <button class="btn btn-dark" id="b5" onclick="saveDay(5)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s6">
     <div class="day-label">Dag 6 van 7</div>
     <div class="q">Voor wie zou dit handig kunnen zijn? <span class="q-soft">Noem één persoon.</span></div>
     <textarea id="a6" rows="3" placeholder="Iemand die je kent, of iemand die je voor je ziet." oninput="chk('a6','b6')"></textarea>
-    <button class="btn btn-dark" id="b6" onclick="saveDay(6)" disabled>Opslaan →</button>
+    <button class="btn btn-dark" id="b6" onclick="saveDay(6)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s7">
     <div class="day-label">Dag 7 van 7</div>
     <div class="q">Als het oké voelt: stuur die zin naar die persoon.</div>
-    <textarea id="a7" rows="4" placeholder="Schrijf hem hier — ook als je hem niet stuurt. Dat is ook goed." oninput="chk('a7','b7')"></textarea>
-    <p class="opt-note">Sturen is niet verplicht. Schrijven wel.</p>
+    <textarea id="a7" rows="4" placeholder="Je kunt hem hier opschrijven. Sturen mag. Niet sturen is ook goed." oninput="chk('a7','b7')"></textarea>
+    <p class="opt-note">Schrijven helpt. Sturen mag.</p>
     <button class="btn btn-dark" id="b7" onclick="generateSummary()" disabled>Afronden →</button>
   </div>
 
@@ -161,10 +161,14 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <div class="done-title" id="done-title">Opgeslagen.</div>
-      <div class="done-sub" id="done-sub">Morgen is er weer één vraag.</div>
+      <div class="done-title" id="done-title">Afgerond.</div>
+      <div class="done-sub" id="done-sub">Er wacht een volgende stap, wanneer jij er klaar voor bent.</div>
     </div>
     <div class="log-wrap" id="log-wrap"></div>
+    <div id="next-day-wrap" style="margin-top: 1rem; text-align: center; display: none;">
+      <button class="btn btn-light" id="btn-next-day" onclick="goToNextDay()">Verder naar morgen →</button>
+      <p class="opt-note" style="margin-top: 0.5rem;">Alleen als het goed voelt. Eén stap per dag is genoeg.</p>
+    </div>
   </div>
 
   <!-- S13: Actie Sprint dag 1 (directe ingang) -->
@@ -172,8 +176,8 @@
     <div class="day-label">Dag 1</div>
     <div class="q">Schrijf in één zin wat je wilt doen. <span class="q-soft">Niet perfect — gewoon eerlijk.</span></div>
     <textarea id="a13" rows="3" placeholder="Eén zin is genoeg." oninput="chk('a13','b13')"></textarea>
-    <p class="opt-note">Dit is je startpunt. Meer is niet nodig.</p>
-    <button class="btn btn-dark" id="b13" onclick="saveActieDay1()" disabled>Opslaan →</button>
+    <p class="opt-note">Dit is genoeg om mee te beginnen.</p>
+    <button class="btn btn-dark" id="b13" onclick="saveActieDay1()" disabled>Afronden →</button>
   </div>
 
 </div>
