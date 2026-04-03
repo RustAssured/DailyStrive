@@ -28,8 +28,8 @@
     .screen.active { display: flex; animation: rise 0.3s ease forwards; }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .q-meta { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.6rem; }
-    .q-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 0.6rem; }
-    .q-sub { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 2rem; }
+    .q-title { font-family: 'Syne', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 0.75rem; }
+    .q-sub { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 2.25rem; }
     textarea { width: 100%; font-family: 'Instrument Sans', sans-serif; font-size: 15px; padding: 14px 16px; border: 0.5px solid var(--border-mid); border-radius: var(--r); background: var(--surface); color: var(--ink); resize: none; line-height: 1.65; outline: none; transition: border-color 0.2s; margin-bottom: 1.25rem; -webkit-appearance: none; }
     textarea:focus { border-color: var(--ink); }
     textarea::placeholder { color: var(--hint); }
@@ -50,8 +50,8 @@
     .btn-primary:hover:not(:disabled) { background: #2d2d2d; }
     .welcome-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 1rem 0 2rem; }
     .welcome-tag { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 1.5rem; }
-    .welcome-title { font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 1rem; }
-    .welcome-body { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 2.5rem; }
+    .welcome-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1rem; }
+    .welcome-body { font-size: 15px; color: var(--muted); line-height: 1.75; margin-bottom: 2.5rem; }
     .promise-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2.5rem; }
     .promise-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
     .promise-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
@@ -64,13 +64,13 @@
     .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes blink { 0%,100% { opacity: 0.25; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
     .result-tag { display: inline-flex; align-items: center; gap: 6px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 11px; border-radius: 20px; background: var(--green-l); color: var(--green-d); margin-bottom: 1.25rem; }
-    .result-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 0.4rem; }
-    .result-tagline { font-size: 14px; color: var(--muted); font-style: italic; margin-bottom: 1.75rem; line-height: 1.5; }
-    .rblock { border: 0.5px solid var(--border); border-radius: var(--r); padding: 1.1rem 1.25rem; margin-bottom: 0.875rem; background: var(--surface); }
-    .rblock.hl { background: var(--lift); }
-    .rblock-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.5rem; }
-    .rblock-text { font-size: 14px; line-height: 1.7; color: var(--ink); }
-    .rblock-text.nudge { font-style: italic; color: var(--muted); font-size: 15px; }
+    .result-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 0.4rem; }
+    .result-tagline { font-size: 14px; color: var(--muted); font-style: italic; margin-bottom: 2rem; line-height: 1.6; }
+    .rblock { border: 0.5px solid var(--border); border-radius: var(--r); padding: 1.25rem 1.4rem; margin-bottom: 1rem; background: var(--surface); }
+    .rblock.hl { background: var(--lift); border-color: transparent; }
+    .rblock-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.75rem; }
+    .rblock-text { font-size: 15px; line-height: 1.75; color: var(--ink); }
+    .rblock-text.nudge { font-style: normal; color: var(--ink); font-size: 16px; line-height: 1.7; font-weight: 400; }
     .divider { border: none; border-top: 0.5px solid var(--border); margin: 1.25rem 0; }
     .section-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hint); margin-bottom: 0.75rem; }
     .action-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
@@ -86,7 +86,7 @@
     .check-btn.sel { background: var(--ink); color: white; border-color: var(--ink); }
     .saved-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 2rem 0; }
     .saved-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--green-l); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
-    .saved-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .saved-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
     .saved-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 2rem; max-width: 300px; margin-left: auto; margin-right: auto; }
     .log-entry { text-align: left; border-left: 2px solid var(--green); padding: 0.5rem 0 0.5rem 0.875rem; margin-bottom: 0.75rem; }
     .log-day-label { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--hint); margin-bottom: 3px; }
@@ -106,12 +106,12 @@
   <div class="screen active" id="s0">
     <div class="welcome-hero">
       <div class="welcome-tag">Voor wie iets wil opbouwen</div>
-      <div class="welcome-title">De kleinste stap die je vandaag wél gaat zetten.</div>
-      <div class="welcome-body">DailyStrive leert waar jij vastloopt. En geeft je elke dag precies de stap die haalbaar voelt én betekenisvol is.</div>
+      <div class="welcome-title">Eén stap per dag.<br>Niet meer dan dat.</div>
+      <div class="welcome-body">DailyStrive geeft je elke dag één concrete actie — afgestemd op wie je bent en waar je vastloopt.</div>
       <div class="promise-list">
-        <div class="promise-item"><div class="promise-dot"></div><span>Geen businessplan. Eén stap per dag.</span></div>
-        <div class="promise-item"><div class="promise-dot"></div><span>Aangepast aan hoe jij werkt en beweegt.</span></div>
-        <div class="promise-item"><div class="promise-dot"></div><span>Zachte accountability — geen druk.</span></div>
+        <div class="promise-item"><div class="promise-dot"></div><span>Zeven vragen. Daarna gewoon beginnen.</span></div>
+        <div class="promise-item"><div class="promise-dot"></div><span>Geen planning. Geen druk. Eén stap.</span></div>
+        <div class="promise-item"><div class="promise-dot"></div><span>Het systeem past zich aan jou aan.</span></div>
       </div>
       <button class="btn btn-primary" onclick="goTo(1)">Beginnen →</button>
     </div>
@@ -199,9 +199,9 @@
   <!-- S8: Loading -->
   <div class="screen" id="s8">
     <div class="loading-wrap">
-      <div class="q-meta">Analyse</div>
-      <div class="loading-title">We kijken wat bij jou past.</div>
-      <div class="loading-sub">DailyStrive bepaalt je frictieprofiel en eerste stap op basis van jouw antwoorden.</div>
+      <div class="q-meta">Even geduld</div>
+      <div class="loading-title" style="font-size:20px;font-weight:700;">Je eerste stap wordt bepaald.</div>
+      <div class="loading-sub">Op basis van wat jij hebt ingevuld.</div>
       <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
   </div>
@@ -211,33 +211,48 @@
     <div class="result-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Jouw eerste stap</div>
     <div class="result-title" id="r-title">—</div>
     <div class="result-tagline" id="r-tagline">—</div>
-    <div class="rblock hl"><div class="rblock-label">De nudge van dag 1</div><div class="rblock-text nudge" id="r-nudge">—</div></div>
-    <div class="rblock"><div class="rblock-label">Waarom dit bij jou past</div><div class="rblock-text" id="r-why">—</div></div>
+
+    <div class="rblock hl" style="margin-bottom:1.5rem;">
+      <div class="rblock-text nudge" id="r-nudge">—</div>
+    </div>
+
+    <div class="rblock">
+      <div class="rblock-label">Waarom dit</div>
+      <div class="rblock-text" id="r-why" style="font-size:13px;color:var(--muted);line-height:1.65;">—</div>
+    </div>
+
     <div class="divider"></div>
-    <div class="section-label">Deze week doe je dit</div>
+    <div class="section-label">Deze week</div>
     <ul class="action-list" id="r-actions"></ul>
-    <div class="rblock"><div class="rblock-label">De vraag die alles bepaalt</div><div class="rblock-text" id="r-question">—</div></div>
+
+    <div class="rblock" style="margin-bottom:1.5rem;">
+      <div class="rblock-label">De vraag die telt</div>
+      <div class="rblock-text" id="r-question" style="font-size:13px;font-style:italic;color:var(--muted);">—</div>
+    </div>
+
     <div class="cta-block">
-      <div class="cta-title">Sprint 1 begint nu.</div>
-      <div class="cta-sub">DailyStrive onthoudt je voortgang en past de volgende stap aan op wat jij teruggeeft.</div>
-      <button class="btn btn-primary" onclick="startSprint()">Start sprint 1 →</button>
+      <div class="cta-title">Klaar om te beginnen?</div>
+      <div class="cta-sub">Sprint 1 start nu. Eén stap per dag.</div>
+      <button class="btn btn-primary" onclick="startSprint()">Start →</button>
     </div>
   </div>
 
   <!-- S10: Dag 1 -->
   <div class="screen" id="s10">
-    <div class="q-meta">Sprint 1 — Dag 1</div>
+    <div class="q-meta">Dag 1</div>
     <div class="q-title" style="margin-bottom:1.5rem;">Jouw stap van vandaag.</div>
-    <div class="rblock hl" style="margin-bottom:1.5rem;"><div class="rblock-label">Doe dit nu</div><div class="rblock-text nudge" id="day1-nudge">—</div></div>
-    <div class="q-meta" style="margin-bottom:0.5rem;">Reflectie (optioneel)</div>
-    <textarea id="day1-ref" rows="3" placeholder="Wat merkte je? Wat lukte of lukte niet? Geen druk." style="margin-bottom:1rem;"></textarea>
-    <div class="q-meta" style="margin-bottom:0.625rem;">Hoe ging het?</div>
+    <div class="rblock hl" style="margin-bottom:2rem;"><div class="rblock-text nudge" id="day1-nudge">—</div></div>
+    <div class="q-meta" style="margin-bottom:0.5rem;">Hoe ging het?</div>
     <div class="check-row">
-      <button class="check-btn" id="cb-done" onclick="selectCheck('done')">✓ Gedaan</button>
-      <button class="check-btn" id="cb-partial" onclick="selectCheck('partial')">~ Gedeeltelijk</button>
-      <button class="check-btn" id="cb-no" onclick="selectCheck('no')">— Niet nu</button>
+      <button class="check-btn" id="cb-done" onclick="selectCheck('done')">Gedaan</button>
+      <button class="check-btn" id="cb-partial" onclick="selectCheck('partial')">Een beetje</button>
+      <button class="check-btn" id="cb-no" onclick="selectCheck('no')">Niet nu</button>
     </div>
-    <div style="margin-top:1.5rem;"><button class="btn btn-primary" id="b-save" onclick="saveDay1()" disabled>Dag 1 opslaan</button></div>
+    <div style="margin-top:1.25rem;">
+      <div class="q-meta" style="margin-bottom:0.5rem;">Wat merkte je? <span style="font-weight:400;text-transform:none;letter-spacing:0;font-family:'Instrument Sans',sans-serif;color:var(--hint);">(optioneel)</span></div>
+      <textarea id="day1-ref" rows="3" placeholder="Geen druk. Gewoon wat er opkwam." style="margin-bottom:1rem;"></textarea>
+    </div>
+    <button class="btn btn-primary" id="b-save" onclick="saveDay1()" disabled>Opslaan</button>
   </div>
 
   <!-- S11: Opgeslagen -->
@@ -318,38 +333,43 @@
     profiel = p.key;
     goTo(8);
 
-    const prompt = `Je bent een warme, directe en eerlijke coach voor solo professionals. Je schrijft alsof je deze persoon echt kent. Geen generieke adviezen. Geen buzzwords. Geen motivational poster taal.
+    const prompt = `Je bent een coach die nooit coacht. Je geeft mensen één kleine actie. Niet meer.
+
+HARDE REGELS — nooit breken:
+1. De nudge = EXACT 1 actie. Niet twee. Niet "doe dit en daarna dat."
+2. De nudge = MAXIMAAL 2 zinnen. Niet meer.
+3. Geen uitleg. Geen strategie. Geen motivatiepraat.
+4. De actie moet binnen 10 seconden te begrijpen zijn.
+5. De actie moet klein genoeg zijn om niet uit te stellen.
+6. Schrijf zoals iemand tegen zichzelf praat. Niet als coach.
+7. Gebruik het onderwerp van de gebruiker concreet in de nudge.
+
+NIET: "Schrijf vandaag in 10 minuten over je idee en bedenk wie je doelgroep is."
+WEL: "Pak 10 minuten. Schrijf hoe jij dit aan één vriend zou uitleggen."
 
 GEBRUIKERSPROFIEL:
-Energie en expertise: "${A.q1}"
+Expertise en onderwerp: "${A.q1}"
 Frictiepatroon (${p.label}): ${p.omschrijving}
-Wat vermijden in nudge: ${p.vermijden}
+Wat vermijden: ${p.vermijden}
 Gewenste toon: ${p.toon}
 Patroon bij starten: "${A.q3}"
 Beschikbare tijd: ${tijdLabels[A.tijd]}
 Technisch comfort: ${techLabels[A.tech]}
 Richting: ${richtingLabels[A.richting]}
-Diepste blokkade: "${A.q7}"
-
-INSTRUCTIES:
-1. Bedenk het meest logische eerste businessconcept specifiek voor DEZE persoon op basis van hun expertise.
-2. De nudge moet zo klein zijn dat er geen reden is om het niet te doen. Max 10 minuten. Concreet. Verwijs naar hun expertise of blokkade.
-3. Spreek de persoon direct aan met 'je' en 'jij'.
-4. De drie acties zijn oplopend: ultra-klein (max 10 min) → klein (15-30 min) → richting eerste extern contact.
-5. De eerste_vraag is scherp en persoonlijk. Eén zin.
+Blokkade: "${A.q7}"
 
 Geef ALLEEN dit JSON zonder markdown:
 {
-  "titel": "Naam van het businessconcept (max 8 woorden, concreet)",
-  "tagline": "Wat je precies doet en voor wie (max 12 woorden)",
-  "nudge": "De eerste stap van vandaag. Ultra-klein. Uitvoerbaar in 5-10 minuten. Persoonlijk en concreet. (2-3 zinnen)",
-  "waarom": "Waarom dit specifiek bij deze persoon past. Verwijs naar hun werk, frictie en situatie. Eerlijk. (3-4 zinnen)",
+  "titel": "Naam van het concept (max 6 woorden, concreet, geen jargon)",
+  "tagline": "Wat je doet en voor wie (max 10 woorden, simpel)",
+  "nudge": "Exact 1 actie. Max 2 zinnen. Gebruik het specifieke onderwerp van de gebruiker. Schrijf zoals iemand tegen zichzelf praat. Geen coaching taal.",
+  "waarom": "Waarom dit bij deze persoon past. Max 2 zinnen. Concreet. Geen hype.",
   "acties": [
-    "Actie 1 — ultra-klein, vandaag, max 10 minuten",
-    "Actie 2 — klein, deze week, 15-30 minuten",
-    "Actie 3 — richting validatie of eerste extern contact"
+    "Actie 1 — vandaag, max 10 minuten, ultra-concreet",
+    "Actie 2 — deze week, 15-30 minuten",
+    "Actie 3 — eerste stap richting iemand anders"
   ],
-  "eerste_vraag": "De kernvraag die alles bepaalt voor deze persoon. Eén scherpe zin."
+  "eerste_vraag": "De ene vraag die alles bepaalt. Eén zin. Scherp."
 }`;
 
     try {
