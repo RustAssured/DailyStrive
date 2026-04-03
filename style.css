@@ -317,7 +317,14 @@ textarea::placeholder { color: var(--hint); }
   font-size: 13px;
   color: var(--hint);
   line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.summary-note {
+  font-size: 12px;
+  color: var(--hint);
   margin-bottom: 1.5rem;
+  font-style: italic;
 }
 
 .summary-text {

@@ -91,19 +91,45 @@ async function generateSummary() {
     .join('\n');
 
   const prompt =
-    'Je bent een zacht en eerlijk systeem dat mensen helpt richting te ontdekken.\n\n' +
-    'Iemand heeft zeven dagen lang één vraag per dag beantwoord. Dit zijn hun antwoorden:\n\n' +
-    context + '\n\n' +
-    'Schrijf nu een zachte samenvatting van wat je ziet ontstaan.\n\n' +
-    'Harde regels:\n' +
-    '- Max 4 zinnen\n' +
-    '- Geen "je moet" of "je zou moeten"\n' +
-    '- Geen business-taal: geen "product", "klant", "valideren", "business", "ondernemen"\n' +
-    '- Gebruik hun eigen woorden terug\n' +
-    '- Eindig met één zachte open observatie\n' +
-    '- Geen adviezen, geen druk, geen plan\n\n' +
-    'Toon: zoals iemand die goed luistert en zachtjes terugspeelt wat hij hoorde.\n\n' +
-    'Begin direct met de samenvatting, geen inleiding.';
+    'Je schrijft een korte, warme reflectie voor een gebruiker op basis van 7 antwoorden.\n\n' +
+
+    'BELANGRIJK:\n' +
+    '- Je bent geen coach\n' +
+    '- Je geeft geen advies\n' +
+    '- Je trekt geen harde conclusies\n' +
+    '- Je labelt de gebruiker niet\n' +
+    '- Je gebruikt woorden als: "het lijkt", "misschien", "het voelt alsof"\n' +
+    '- Je laat ruimte voor twijfel en interpretatie\n\n' +
+
+    'STRUCTUUR:\n' +
+    '1. Open zacht — gebruik: "Dit is wat er in jouw antwoorden lijkt te ontstaan."\n' +
+    '2. Spiegel patronen — wat valt op, waar zit energie, waar voorzichtigheid\n' +
+    '3. Geef subtiele richting — wat zou dit kunnen betekenen, zonder conclusie\n' +
+    '4. Sluit open af — geen actie, geen plan, alleen een gevoel van richting\n' +
+    '5. Voeg optioneel één zin toe die suggereert dat dit waardevol kan zijn voor anderen — zonder het woord "business"\n\n' +
+
+    'TOON: warm, rustig, menselijk, niet zweverig, niet coachy\n\n' +
+
+    'LENGTE: maximaal 120 woorden\n\n' +
+
+    'VERBODEN:\n' +
+    '- "je bent iemand die..."\n' +
+    '- "dit betekent dat..."\n' +
+    '- "je moet..."\n' +
+    '- "product", "business", "klant", "valideren", "ondernemen"\n\n' +
+
+    'VOORBEELD van de gewenste toon:\n' +
+    '"Dit is wat er in jouw antwoorden lijkt te ontstaan.\n\n' +
+    'Het voelt alsof je van nature aandacht hebt voor mensen en hun vragen, ' +
+    'en dat je makkelijk woorden vindt om dingen uit te leggen.\n\n' +
+    'Tegelijk beweeg je hier nog voorzichtig in, ' +
+    'alsof je nog aan het verkennen bent wat klopt.\n\n' +
+    'Misschien zit daar iets wat voor anderen waardevol kan zijn — ' +
+    'niet als plan, maar als richting.\n\n' +
+    'Je hoeft het nog niet scherp te hebben. Dit is al beweging."\n\n' +
+
+    'ANTWOORDEN VAN DE GEBRUIKER:\n' +
+    context;
 
   try {
     const res = await fetch('/api/nudge', {
@@ -120,7 +146,9 @@ async function generateSummary() {
     document.getElementById('summary-text').textContent = data.content[0].text.trim();
   } catch (err) {
     document.getElementById('summary-text').textContent =
-      'Na zeven dagen zie je iets ontstaan. Neem even de tijd om je antwoorden terug te lezen — de richting zit er al in.';
+      'Er lijkt iets te ontstaan in wat je hebt opgeschreven. ' +
+      'Neem even de tijd om je antwoorden terug te lezen — ' +
+      'de richting zit er al in. Je hoeft het nog niet scherp te hebben.';
   }
 
   goTo(9);

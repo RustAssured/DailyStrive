@@ -36,12 +36,11 @@
     </div>
   </div>
 
-  <!-- S1–S7: Oriëntatie Sprint -->
   <div class="screen" id="s1">
     <div class="day-label">Dag 1 van 7</div>
     <div class="q">Waar praat je makkelijk over — ook als niemand erom vraagt?</div>
     <textarea id="a1" rows="4" placeholder="Schrijf gewoon wat er opkomt. Niet perfect." oninput="chk('a1','b1')"></textarea>
-    <p class="opt-note">Geen haast.</p>
+    <p class="opt-note">Denk niet te lang na. Wat komt er als eerste op?</p>
     <button class="btn btn-dark" id="b1" onclick="saveDay(1)" disabled>Afronden →</button>
   </div>
 
@@ -54,8 +53,9 @@
 
   <div class="screen" id="s3">
     <div class="day-label">Dag 3 van 7</div>
-    <div class="q">Wat doe jij hierin op jouw manier — anders dan anderen?</div>
+    <div class="q">Wat doe jij hierin op jouw manier?</div>
     <textarea id="a3" rows="4" placeholder="Geen grote claim nodig. Gewoon eerlijk." oninput="chk('a3','b3')"></textarea>
+    <p class="opt-note">Iets kleins is genoeg.</p>
     <button class="btn btn-dark" id="b3" onclick="saveDay(3)" disabled>Afronden →</button>
   </div>
 
@@ -76,7 +76,7 @@
 
   <div class="screen" id="s6">
     <div class="day-label">Dag 6 van 7</div>
-    <div class="q">Voor wie zou dit handig kunnen zijn? <span class="q-soft">Noem één persoon.</span></div>
+    <div class="q">Voor wie zou dit behulpzaam kunnen zijn? <span class="q-soft">Noem één persoon.</span></div>
     <textarea id="a6" rows="3" placeholder="Iemand die je kent, of iemand die je voor je ziet." oninput="chk('a6','b6')"></textarea>
     <button class="btn btn-dark" id="b6" onclick="saveDay(6)" disabled>Afronden →</button>
   </div>
@@ -84,7 +84,7 @@
   <div class="screen" id="s7">
     <div class="day-label">Dag 7 van 7</div>
     <div class="q">Als het oké voelt: stuur die zin naar die persoon.</div>
-    <textarea id="a7" rows="4" placeholder="Je kunt hem hier opschrijven. Sturen mag. Niet sturen is ook goed." oninput="chk('a7','b7')"></textarea>
+    <textarea id="a7" rows="4" placeholder="Je kunt hem hier eerst opschrijven. Sturen mag. Niet sturen is ook goed." oninput="chk('a7','b7')"></textarea>
     <p class="opt-note">Schrijven helpt. Sturen mag.</p>
     <button class="btn btn-dark" id="b7" onclick="generateSummary()" disabled>Afronden →</button>
   </div>
@@ -105,7 +105,8 @@
   <!-- S9: Samenvatting -->
   <div class="screen" id="s9">
     <div class="summary-tag">Na 7 dagen</div>
-    <div class="summary-intro">Dit is wat we bij jou zien ontstaan.</div>
+    <div class="summary-intro">Dit is wat er in jouw antwoorden lijkt te ontstaan.</div>
+    <p class="summary-note">Niets hiervan hoeft vast te staan.</p>
     <div class="summary-text" id="summary-text">—</div>
     <hr class="divider">
     <div class="next-label">Wat wil je nu?</div>
