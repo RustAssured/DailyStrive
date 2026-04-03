@@ -136,7 +136,7 @@
       Wat maakt dit voor anderen moeilijk?<br>
       Wat zou iemand hier nú willen oplossen?
     </div>
-    <button class="btn btn-dark" onclick="alert('Komt in de volgende versie!')">Start Refinement Sprint →</button>
+    <button class="btn btn-dark" onclick="startRefinementSprint()">Start Refinement Sprint →</button>
     <button class="btn btn-light" onclick="goTo(9)">← Terug</button>
   </div>
 
@@ -179,6 +179,139 @@
     <textarea id="a13" rows="3" placeholder="Eén zin is genoeg." oninput="chk('a13','b13')"></textarea>
     <p class="opt-note">Dit is genoeg om mee te beginnen.</p>
     <button class="btn btn-dark" id="b13" onclick="saveActieDay1()" disabled>Afronden →</button>
+  </div>
+
+  <!-- Refinement Sprint: Dag 8–14 -->
+  <div class="screen" id="s-r8">
+    <div class="day-label">Dag 8 van 14</div>
+    <div class="q">Wat raakt mensen hier het meest in?<br>
+      <span class="q-soft">Waar zit het echte ongemak?</span>
+    </div>
+    <textarea id="r8" rows="4"
+      placeholder="Niet wat je denkt dat je moet zeggen. Wat je echt ziet."
+      oninput="chk('r8','rb8')"></textarea>
+    <button class="btn btn-dark" id="rb8"
+      onclick="saveRefinementDay(8)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-r9">
+    <div class="day-label">Dag 9 van 14</div>
+    <div class="q">Waarom is dit voor mensen lastig om zelf op te lossen?<br>
+      <span class="q-soft">Wat maakt het moeilijk?</span>
+    </div>
+    <textarea id="r9" rows="4"
+      placeholder="Denk aan iemand die je kent die hiermee worstelt."
+      oninput="chk('r9','rb9')"></textarea>
+    <button class="btn btn-dark" id="rb9"
+      onclick="saveRefinementDay(9)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-r10">
+    <div class="day-label">Dag 10 van 14</div>
+    <div class="q">Wat zoeken mensen eigenlijk als ze hiermee zitten?<br>
+      <span class="q-soft">Niet wat ze zeggen — maar wat ze bedoelen.</span>
+    </div>
+    <textarea id="r10" rows="4"
+      placeholder="Soms is de vraag achter de vraag het echte antwoord."
+      oninput="chk('r10','rb10')"></textarea>
+    <button class="btn btn-dark" id="rb10"
+      onclick="saveRefinementDay(10)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-r11">
+    <div class="day-label">Dag 11 van 14</div>
+    <div class="q">Wat zou iemand nú willen dat werkt?<br>
+      <span class="q-soft">Geen perfect plan. Gewoon iets dat helpt.</span>
+    </div>
+    <textarea id="r11" rows="4"
+      placeholder="Klein en concreet is beter dan groot en vaag."
+      oninput="chk('r11','rb11')"></textarea>
+    <button class="btn btn-dark" id="rb11"
+      onclick="saveRefinementDay(11)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-r12">
+    <div class="day-label">Dag 12 van 14</div>
+    <div class="q">Wat zou jij daarin anders doen dan wat er al bestaat?<br>
+      <span class="q-soft">Iets kleins is genoeg.</span>
+    </div>
+    <textarea id="r12" rows="4"
+      placeholder="Je hoeft het wiel niet opnieuw uit te vinden."
+      oninput="chk('r12','rb12')"></textarea>
+    <button class="btn btn-dark" id="rb12"
+      onclick="saveRefinementDay(12)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-r13">
+    <div class="day-label">Dag 13 van 14</div>
+    <div class="q">Als je dit in één zin zou aanbieden — wat zou je zeggen?<br>
+      <span class="q-soft">Alsof je het aan één persoon uitlegt.</span>
+    </div>
+    <textarea id="r13" rows="3"
+      placeholder="Niet perfect. Gewoon een eerste poging."
+      oninput="chk('r13','rb13')"></textarea>
+    <p class="opt-note">Eén zin. Meer hoeft niet.</p>
+    <button class="btn btn-dark" id="rb13"
+      onclick="saveRefinementDay(13)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-r14">
+    <div class="day-label">Dag 14 van 14</div>
+    <div class="q">Zou je dit tegen iemand kunnen zeggen?</div>
+    <textarea id="r14" rows="4"
+      placeholder="Je kunt het hier opschrijven. Sturen mag. Niet sturen is ook goed."
+      oninput="chk('r14','rb14')"></textarea>
+    <p class="opt-note">Schrijven helpt. Sturen mag.</p>
+    <button class="btn btn-dark" id="rb14"
+      onclick="generateRefinementSummary()" disabled>Afronden →</button>
+  </div>
+
+  <!-- Refinement Loading -->
+  <div class="screen" id="s-rloading">
+    <div class="loading-wrap">
+      <div class="day-label">Even geduld</div>
+      <div class="loading-q">We kijken wat er in twee weken is ontstaan.</div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Refinement Summary -->
+  <div class="screen" id="s-rsummary">
+    <div class="summary-tag">Na 14 dagen</div>
+    <div class="summary-intro">Dit begint ergens op te lijken.</div>
+    <p class="summary-note">Niets hiervan hoeft vast te staan.</p>
+    <div class="summary-text" id="refinement-summary-text">—</div>
+    <hr class="divider">
+    <div class="next-label">Wat wil je nu?</div>
+    <div class="choice-btn" onclick="goTo('s-actie')">
+      <div class="choice-icon">→</div>
+      <div>
+        <div class="choice-title">Hier iets mee proberen</div>
+        <div class="choice-desc">Kleine stappen naar buiten. Eén per dag.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actie Sprint teaser (vanuit Refinement) -->
+  <div class="screen" id="s-actie">
+    <div class="day-label">Actie Sprint</div>
+    <div class="q sprint-q">Kleine stappen naar buiten.</div>
+    <div class="sprint-body">
+      Eén actie per dag.<br>
+      Klein genoeg om niet uit te stellen.<br><br>
+      Schrijf drie zinnen.<br>
+      Deel met één persoon.<br>
+      Stel één vraag.
+    </div>
+    <button class="btn btn-dark"
+      onclick="alert('Actie Sprint — komt in de volgende versie!')">
+      Start Actie Sprint →
+    </button>
+    <button class="btn btn-light" onclick="goTo('s-rsummary')">← Terug</button>
   </div>
 
 </div>
