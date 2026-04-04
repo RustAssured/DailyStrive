@@ -16,6 +16,98 @@ function stripMarkdown(text) {
     .trim();
 }
 
+// ─── Vraagvarianten ──────────────────────────────────────────────────────────
+const orientatieVariants = {
+  1: [
+    'Waar praat je makkelijk over — ook als niemand erom vraagt?',
+    'Waar word je enthousiast van als het ter sprake komt?'
+  ],
+  2: [
+    'Wanneer vroeg iemand jou voor het laatst om hulp? Waar ging dat over?',
+    'Wie vraagt jou weleens om advies of om mee te denken?'
+  ],
+  3: [
+    'Wat doe jij hierin op jouw manier?',
+    'Hoe pak jij dit aan — anders dan de meeste mensen?'
+  ],
+  4: [
+    'Stel: iemand zit hiermee vast. Wat zeg jij als eerste?',
+    'Als een vriend je hierover belde — wat zou je zeggen?'
+  ],
+  5: [
+    'Schrijf één zin zoals je het aan één persoon zou uitleggen.',
+    'Hoe zou je dit uitleggen aan iemand die er niks van weet?'
+  ],
+  6: [
+    'Voor wie zou dit behulpzaam kunnen zijn? Noem één persoon.',
+    'Wie schiet er bij jou te binnen als je hieraan denkt?'
+  ],
+  7: [
+    'Als het oké voelt: stuur die zin naar die persoon.',
+    'Wat zou je willen dat iemand anders hierover weet?'
+  ]
+};
+
+const ideeVariants = {
+  1: [
+    'Waarom blijft dit idee terugkomen bij je?',
+    'Wat maakt dat je dit idee niet loslaat?'
+  ],
+  2: [
+    'Wie is één persoon die hier iets aan zou kunnen hebben?',
+    'Voor wie zou dit het meeste betekenen?'
+  ],
+  3: [
+    'Wanneer zou iemand dit nodig hebben? In welk moment of situatie?',
+    'In welke situatie denk je: hier had ik iets voor willen hebben?'
+  ],
+  4: [
+    'Als je dit heel simpel zou maken — hoe zou dat eruitzien?',
+    'Wat is de meest eenvoudige vorm die je je kunt voorstellen?'
+  ],
+  5: [
+    'Stel je legt dit uit in één zin — wat zeg je?',
+    'Hoe zou jij dit in één zin omschrijven aan iemand die je kent?'
+  ],
+  6: [
+    'Schrijf die zin alsof je hem zou sturen.',
+    'Schrijf het op zoals je het in een bericht zou zetten.'
+  ],
+  7: [
+    'Wat merkte je toen je dit opschreef of deelde?',
+    'Hoe voelde het om dit de afgelopen dagen te verkennen?'
+  ]
+};
+
+function setRandomVariant(screenId, variants, dayNum) {
+  const screen = document.getElementById(screenId);
+  if (!screen) return;
+  const qEl = screen.querySelector('.q');
+  if (!qEl) return;
+  const options = variants[dayNum];
+  if (!options || options.length === 0) return;
+  const chosen = options[Math.floor(Math.random() * options.length)];
+  const soft = qEl.querySelector('.q-soft');
+  qEl.textContent = chosen;
+  if (soft) qEl.appendChild(soft);
+}
+
+function showContextAnchor(screenId, previousKey) {
+  const all = load('answers') || {};
+  const prev = all[previousKey];
+  if (!prev || prev.length < 5) return;
+  const screen = document.getElementById(screenId);
+  if (!screen) return;
+  const existing = screen.querySelector('.context-anchor');
+  if (existing) existing.remove();
+  const words = prev.trim().split(' ').slice(0, 12).join(' ');
+  const anchor = document.createElement('p');
+  anchor.className = 'context-anchor';
+  anchor.textContent = '\u201c' + words + (prev.split(' ').length > 12 ? '\u2026' : '') + '\u201d';
+  const textarea = screen.querySelector('textarea');
+  if (textarea) screen.insertBefore(anchor, textarea);
+}
+
 // ─── Navigation ─────────────────────────────────────────────────────────────
 function goTo(id) {
   const oldId = typeof currentScreen === 'number'
@@ -36,6 +128,35 @@ function goTo(id) {
     updateProgress(id);
   } else {
     document.getElementById('prog').style.display = 'none';
+  }
+
+  const screenKey = typeof id === 'number' ? 's' + id : id;
+
+  // Contextankers
+  const anchorMap = {
+    's2': 'dag1', 's3': 'dag2', 's4': 'dag3',
+    's5': 'dag4', 's6': 'dag5', 's7': 'dag6'
+  };
+  const ideeAnchorMap = {
+    's-i2': 'i1', 's-i3': 'i2', 's-i4': 'i3',
+    's-i5': 'i4', 's-i6': 'i5', 's-i7': 'i6'
+  };
+  if (anchorMap[screenKey]) showContextAnchor(screenKey, anchorMap[screenKey]);
+  if (ideeAnchorMap[screenKey]) showContextAnchor(screenKey, ideeAnchorMap[screenKey]);
+
+  // Vraagvarianten
+  const orientatieScreens = {
+    's1': 1, 's2': 2, 's3': 3, 's4': 4, 's5': 5, 's6': 6, 's7': 7
+  };
+  const ideeScreens = {
+    's-i1': 1, 's-i2': 2, 's-i3': 3, 's-i4': 4,
+    's-i5': 5, 's-i6': 6, 's-i7': 7
+  };
+  if (orientatieScreens[screenKey] !== undefined) {
+    setRandomVariant(screenKey, orientatieVariants, orientatieScreens[screenKey]);
+  }
+  if (ideeScreens[screenKey] !== undefined) {
+    setRandomVariant(screenKey, ideeVariants, ideeScreens[screenKey]);
   }
 }
 
