@@ -109,6 +109,19 @@ function renderLog() {
     ).join('');
   }
 
+  const ideeAnswers = Object.entries(all)
+    .filter(([k]) => k.startsWith('i') && !isNaN(parseInt(k.replace('i', ''))));
+
+  if (ideeAnswers.length > 0) {
+    html += '<div class="log-label" style="margin:1rem 0 0.75rem;">Idee Sprint</div>';
+    html += ideeAnswers.map(([k, v]) =>
+      '<div class="log-entry">' +
+        '<div class="log-label">Dag ' + k.replace('i', '') + '</div>' +
+        '<div class="log-text">' + v + '</div>' +
+      '</div>'
+    ).join('');
+  }
+
   logEl.innerHTML = html;
 }
 
@@ -202,6 +215,123 @@ function saveActieDay1() {
       '<div class="log-text">' + val + '</div>' +
     '</div>';
   goTo(12);
+}
+
+// ─── Idee Sprint ─────────────────────────────────────────────────────────────
+
+const ideeDayToScreen = {
+  1: 's-i1', 2: 's-i2', 3: 's-i3', 4: 's-i4',
+  5: 's-i5', 6: 's-i6', 7: 's-i7'
+};
+
+function startIdeeSprint() {
+  updateIdeeProgress(1);
+  goTo('s-i1');
+}
+
+function updateIdeeProgress(dayNum) {
+  const prog = document.getElementById('prog');
+  prog.style.display = 'flex';
+  prog.innerHTML = '';
+  for (let i = 1; i <= 7; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'prog-seg' +
+      (i < dayNum ? ' done' : i === dayNum ? ' active' : '');
+    prog.appendChild(seg);
+  }
+}
+
+function saveIdeeDay(n) {
+  const val = document.getElementById('i' + n).value.trim();
+  answers['i' + n] = val;
+  save('answers', answers);
+
+  document.getElementById('done-title').textContent = 'Dag ' + n + ' afgerond.';
+  document.getElementById('done-sub').textContent =
+    'Er wacht een volgende stap, wanneer jij er klaar voor bent.';
+
+  const nextDayWrap = document.getElementById('next-day-wrap');
+  const btnNext = document.getElementById('btn-next-day');
+
+  if (n < 7) {
+    nextDayNumber = n + 1;
+    nextDayWrap.style.display = 'block';
+    btnNext.onclick = function() {
+      const nextScreen = ideeDayToScreen[nextDayNumber];
+      if (nextScreen) {
+        updateIdeeProgress(nextDayNumber);
+        goTo(nextScreen);
+      }
+    };
+  } else {
+    nextDayWrap.style.display = 'none';
+  }
+
+  renderLog();
+  goTo(12);
+}
+
+async function generateIdeeSummary() {
+  const val = document.getElementById('i7').value.trim();
+  answers['i7'] = val;
+  save('answers', answers);
+  goTo('s-iloading');
+
+  const all = load('answers') || {};
+
+  const ideeAnswers = Object.entries(all)
+    .filter(([k]) => k.startsWith('i') && !isNaN(parseInt(k.replace('i', ''))))
+    .map(([k, v]) => 'Dag ' + k.replace('i', '') + ': "' + v + '"')
+    .join('\n');
+
+  const prompt =
+    'Je schrijft een korte, warme reflectie voor een gebruiker op basis van 7 antwoorden.\n\n' +
+
+    'De gebruiker had al een idee en heeft zeven dagen lang vragen beantwoord:\n' +
+    '- Waarom het idee terugkomt\n' +
+    '- Voor wie het is\n' +
+    '- In welk moment iemand het nodig heeft\n' +
+    '- Hoe een eerste simpele vorm eruitziet\n' +
+    '- Hoe ze het in één zin uitleggen\n' +
+    '- Hoe het voelt om het op te schrijven of te delen\n\n' +
+
+    'JOUW TAAK:\n' +
+    '- Spiegel wat er lijkt te ontstaan\n' +
+    '- Gebruik woorden als: "het lijkt", "misschien", "het voelt alsof"\n' +
+    '- Geen coaching, geen advies, geen conclusies\n' +
+    '- Geen "je moet", "je bent iemand die", "dit betekent dat"\n' +
+    '- Sluit af met één zachte zin die richting geeft zonder druk\n\n' +
+
+    'VERBODEN:\n' +
+    '"business", "product", "klant", "valideren", "pitch", "markt"\n\n' +
+
+    'LENGTE: maximaal 120 woorden\n\n' +
+
+    'TOON: warm, rustig, open — zoals iemand die goed luistert\n\n' +
+
+    'ANTWOORDEN:\n' + ideeAnswers;
+
+  try {
+    const res = await fetch('/api/nudge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 350,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    document.getElementById('idee-summary-text').textContent =
+      data.content[0].text.trim();
+  } catch (err) {
+    document.getElementById('idee-summary-text').textContent =
+      'Er lijkt iets te zitten in hoe jij dit ziet en uitlegt. ' +
+      'Niet als plan, maar als iets wat je voorzichtig kunt blijven verkennen.';
+  }
+
+  goTo('s-isummary');
 }
 
 // ─── Refinement Sprint ────────────────────────────────────────────────────────

@@ -25,7 +25,7 @@
           <div class="choice-desc">We ontdekken samen waar beweging zit. 7 dagen, één vraag per dag.</div>
         </div>
       </div>
-      <div class="choice-btn" onclick="startActie()">
+      <div class="choice-btn" onclick="startIdeeSprint()">
         <div class="choice-icon">→</div>
         <div>
           <div class="choice-title">Ik heb al een idee</div>
@@ -294,6 +294,140 @@
         <div class="choice-desc">Kleine stappen naar buiten. Eén per dag.</div>
       </div>
     </div>
+  </div>
+
+  <!-- Idee Sprint: Dag 1–7 -->
+  <div class="screen" id="s-i1">
+    <div class="day-label">Dag 1 van 7</div>
+    <div class="q">Waarom blijft dit idee terugkomen bij je?</div>
+    <textarea id="i1" rows="4"
+      placeholder="Niet wat logisch klinkt. Wat je echt voelt."
+      oninput="chk('i1','ib1')"></textarea>
+    <p class="opt-note">Geen goed antwoord. Gewoon eerlijk.</p>
+    <button class="btn btn-dark" id="ib1"
+      onclick="saveIdeeDay(1)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-i2">
+    <div class="day-label">Dag 2 van 7</div>
+    <div class="q">Wie is één persoon die hier iets aan zou kunnen hebben?</div>
+    <textarea id="i2" rows="4"
+      placeholder="Iemand die je kent, of iemand die je voor je ziet."
+      oninput="chk('i2','ib2')"></textarea>
+    <p class="opt-note">Één persoon is genoeg.</p>
+    <button class="btn btn-dark" id="ib2"
+      onclick="saveIdeeDay(2)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-i3">
+    <div class="day-label">Dag 3 van 7</div>
+    <div class="q">Wanneer zou iemand dit nodig hebben?<br>
+      <span class="q-soft">In welk moment of situatie?</span>
+    </div>
+    <textarea id="i3" rows="4"
+      placeholder="Denk aan een concreet moment, niet een algemene behoefte."
+      oninput="chk('i3','ib3')"></textarea>
+    <button class="btn btn-dark" id="ib3"
+      onclick="saveIdeeDay(3)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-i4">
+    <div class="day-label">Dag 4 van 7</div>
+    <div class="q">Als je dit heel simpel zou maken — hoe zou dat eruitzien?</div>
+    <textarea id="i4" rows="4"
+      placeholder="Een gesprek, een uitleg, een tekst, een voorbeeld. Wat voelt het meest natuurlijk?"
+      oninput="chk('i4','ib4')"></textarea>
+    <p class="opt-note">Geen product. Gewoon een eerste vorm.</p>
+    <button class="btn btn-dark" id="ib4"
+      onclick="saveIdeeDay(4)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-i5">
+    <div class="day-label">Dag 5 van 7</div>
+    <div class="q">Stel je legt dit uit in één zin — wat zeg je?</div>
+    <textarea id="i5" rows="3"
+      placeholder="Niet mooi. Gewoon zoals het komt."
+      oninput="chk('i5','ib5')"></textarea>
+    <p class="opt-note">Één zin. Meer hoeft niet.</p>
+    <button class="btn btn-dark" id="ib5"
+      onclick="saveIdeeDay(5)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-i6">
+    <div class="day-label">Dag 6 van 7</div>
+    <div class="q">Schrijf die zin alsof je hem zou sturen.</div>
+    <textarea id="i6" rows="4"
+      placeholder="Gewoon opschrijven. Sturen mag — maar hoeft niet."
+      oninput="chk('i6','ib6')"></textarea>
+    <p class="opt-note">Schrijven helpt. Sturen mag.</p>
+    <button class="btn btn-dark" id="ib6"
+      onclick="saveIdeeDay(6)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-i7">
+    <div class="day-label">Dag 7 van 7</div>
+    <div class="q">Wat merkte je toen je dit opschreef of deelde?</div>
+    <textarea id="i7" rows="4"
+      placeholder="Geen goed antwoord. Gewoon wat er opkomt."
+      oninput="chk('i7','ib7')"></textarea>
+    <p class="opt-note">De ervaring telt. Niet het resultaat.</p>
+    <button class="btn btn-dark" id="ib7"
+      onclick="generateIdeeSummary()" disabled>Afronden →</button>
+  </div>
+
+  <!-- Idee Sprint Loading -->
+  <div class="screen" id="s-iloading">
+    <div class="loading-wrap">
+      <div class="day-label">Even geduld</div>
+      <div class="loading-q">We kijken wat er de afgelopen zeven dagen is ontstaan.</div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Idee Sprint Summary -->
+  <div class="screen" id="s-isummary">
+    <div class="summary-tag">Na 7 dagen</div>
+    <div class="summary-intro">Dit is wat er in jouw antwoorden lijkt te ontstaan.</div>
+    <p class="summary-note">Niets hiervan hoeft vast te staan.</p>
+    <div class="summary-text" id="idee-summary-text">—</div>
+    <hr class="divider">
+    <div class="next-label">Wat wil je nu?</div>
+    <div class="choice-btn" onclick="goTo('s-irefinement')">
+      <div class="choice-icon">◎</div>
+      <div>
+        <div class="choice-title">Dit nog scherper krijgen</div>
+        <div class="choice-desc">Nog een week vragen. Dieper, maar nog steeds licht.</div>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="goTo('s-actie')">
+      <div class="choice-icon">→</div>
+      <div>
+        <div class="choice-title">Hier iets mee proberen</div>
+        <div class="choice-desc">Kleine stappen naar buiten. Eén per dag.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Idee Refinement teaser -->
+  <div class="screen" id="s-irefinement">
+    <div class="day-label">Refinement Sprint</div>
+    <div class="q sprint-q">Nog een week vragen.</div>
+    <div class="sprint-body">
+      Dezelfde structuur. Één vraag per dag.<br>
+      Maar nu dieper op wat je hebt ontdekt.<br><br>
+      Wat maakt jouw aanpak anders?<br>
+      Wat zou iemand hier nú willen?<br>
+      Hoe zou je dit klein kunnen testen?
+    </div>
+    <button class="btn btn-dark"
+      onclick="alert('Refinement Sprint — komt in de volgende versie!')">
+      Start Refinement Sprint →
+    </button>
+    <button class="btn btn-light" onclick="goTo('s-isummary')">← Terug</button>
   </div>
 
   <!-- Actie Sprint teaser (vanuit Refinement) -->
