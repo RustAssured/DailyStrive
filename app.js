@@ -4,6 +4,18 @@ let currentScreen = 0;
 const answers = {};
 let nextDayNumber = 0;
 
+function stripMarkdown(text) {
+  return text
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/^[-*+]\s+/gm, '')
+    .replace(/^\d+\.\s+/gm, '')
+    .replace(/`{1,3}[^`]*`{1,3}/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 // ─── Navigation ─────────────────────────────────────────────────────────────
 function goTo(id) {
   const oldId = typeof currentScreen === 'number'
@@ -139,42 +151,44 @@ async function generateSummary() {
     .join('\n');
 
   const prompt =
-    'Je schrijft een korte, warme reflectie voor een gebruiker op basis van 7 antwoorden.\n\n' +
+    'Je schrijft een korte, warme reflectie. Drie delen. Vloeiende tekst.\n\n' +
 
-    'BELANGRIJK:\n' +
-    '- Je bent geen coach\n' +
-    '- Je geeft geen advies\n' +
-    '- Je trekt geen harde conclusies\n' +
-    '- Je labelt de gebruiker niet\n' +
-    '- Je gebruikt woorden als: "het lijkt", "misschien", "het voelt alsof"\n' +
-    '- Je laat ruimte voor twijfel en interpretatie\n\n' +
+    'DEEL 1 — REFLECTIE (max 2 zinnen)\n' +
+    'Wat zie je terug in de antwoorden?\n' +
+    'Concreet. Geen interpretatie. Geen psychologische analyse.\n' +
+    'Gebruik woorden als: "het lijkt", "misschien", "het voelt alsof"\n\n' +
 
-    'STRUCTUUR:\n' +
-    '1. Open zacht — gebruik: "Dit is wat er in jouw antwoorden lijkt te ontstaan."\n' +
-    '2. Spiegel patronen — wat valt op, waar zit energie, waar voorzichtigheid\n' +
-    '3. Geef subtiele richting — wat zou dit kunnen betekenen, zonder conclusie\n' +
-    '4. Sluit open af — geen actie, geen plan, alleen een gevoel van richting\n' +
-    '5. Voeg optioneel één zin toe die suggereert dat dit waardevol kan zijn voor anderen — zonder het woord "business"\n\n' +
+    'DEEL 2 — RICHTING (max 2 zinnen)\n' +
+    'Waar lijkt dit heen te bewegen?\n' +
+    'Klein en open. Niet "dit moet je doen". Wel: "hier lijkt iets te zitten"\n\n' +
 
-    'TOON: warm, rustig, menselijk, niet zweverig, niet coachy\n\n' +
+    'DEEL 3 — EERSTE KLEINE STAP (exact 1 zin)\n' +
+    'Één concrete actie. Direct uitvoerbaar. Max 15 minuten.\n' +
+    'Geen voorbereiding nodig.\n' +
+    'Altijd: één persoon OF één object (een werk, een zin, een idee)\n' +
+    'Nooit: abstracte stappen, meerdere opties, "denk na over"\n\n' +
 
-    'LENGTE: maximaal 120 woorden\n\n' +
+    'TOTALE LENGTE: maximaal 80 woorden\n\n' +
 
-    'VERBODEN:\n' +
-    '- "je bent iemand die..."\n' +
-    '- "dit betekent dat..."\n' +
-    '- "je moet..."\n' +
-    '- "product", "business", "klant", "valideren", "ondernemen"\n\n' +
+    'FORMATTING:\n' +
+    '- Geen markdown (geen #, geen *, geen -)\n' +
+    '- Geen titels of headers\n' +
+    '- Geen opsommingen\n' +
+    '- Gewone lopende tekst\n' +
+    '- Twee alinea-omscheidingen tussen de drie delen\n\n' +
 
-    'VOORBEELD van de gewenste toon:\n' +
-    '"Dit is wat er in jouw antwoorden lijkt te ontstaan.\n\n' +
-    'Het voelt alsof je van nature aandacht hebt voor mensen en hun vragen, ' +
-    'en dat je makkelijk woorden vindt om dingen uit te leggen.\n\n' +
-    'Tegelijk beweeg je hier nog voorzichtig in, ' +
-    'alsof je nog aan het verkennen bent wat klopt.\n\n' +
-    'Misschien zit daar iets wat voor anderen waardevol kan zijn — ' +
-    'niet als plan, maar als richting.\n\n' +
-    'Je hoeft het nog niet scherp te hebben. Dit is al beweging."\n\n' +
+    'VERBODEN WOORDEN:\n' +
+    '"je moet", "je bent iemand die", "dit betekent dat"\n' +
+    '"business", "product", "klant", "valideren", "pitch", "markt"\n' +
+    '"kijk eens wat", "ontdek", "verken"\n\n' +
+
+    'VOORBEELD VAN DE JUISTE TOON EN LENGTE:\n' +
+    '"Je komt steeds terug bij het verlangen om je werk te laten zien — ' +
+    'niet alleen voor jezelf, maar omdat je voelt dat het iets kan betekenen voor anderen.\n\n' +
+    'Het lijkt minder te gaan om een grote stap, en meer om een moment waarop ' +
+    'iemand jouw werk ziet en er iets in herkent.\n\n' +
+    'Als je ergens klein begint, zou het dit kunnen zijn: kies één werk en laat ' +
+    'het aan één persoon zien, gewoon om te zien wat het oproept."\n\n' +
 
     'ANTWOORDEN VAN DE GEBRUIKER:\n' +
     context;
@@ -191,12 +205,12 @@ async function generateSummary() {
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
-    document.getElementById('summary-text').textContent = data.content[0].text.trim();
+    document.getElementById('summary-text').textContent = stripMarkdown(data.content[0].text);
   } catch (err) {
     document.getElementById('summary-text').textContent =
-      'Er lijkt iets te ontstaan in wat je hebt opgeschreven. ' +
-      'Neem even de tijd om je antwoorden terug te lezen — ' +
-      'de richting zit er al in. Je hoeft het nog niet scherp te hebben.';
+      'Er lijkt iets te zitten in wat je hebt opgeschreven.\n\n' +
+      'Neem even de tijd om je antwoorden terug te lezen.\n\n' +
+      'Kies één antwoord dat het meest bij je bleef hangen en schrijf er één zin over op.';
   }
 
   goTo(9);
@@ -285,29 +299,35 @@ async function generateIdeeSummary() {
     .join('\n');
 
   const prompt =
-    'Je schrijft een korte, warme reflectie voor een gebruiker op basis van 7 antwoorden.\n\n' +
+    'Je schrijft een korte, warme reflectie. Drie delen. Vloeiende tekst.\n\n' +
 
-    'De gebruiker had al een idee en heeft zeven dagen lang vragen beantwoord:\n' +
-    '- Waarom het idee terugkomt\n' +
-    '- Voor wie het is\n' +
-    '- In welk moment iemand het nodig heeft\n' +
-    '- Hoe een eerste simpele vorm eruitziet\n' +
-    '- Hoe ze het in één zin uitleggen\n' +
-    '- Hoe het voelt om het op te schrijven of te delen\n\n' +
+    'De gebruiker heeft een idee en heeft zeven dagen vragen beantwoord.\n\n' +
 
-    'JOUW TAAK:\n' +
-    '- Spiegel wat er lijkt te ontstaan\n' +
-    '- Gebruik woorden als: "het lijkt", "misschien", "het voelt alsof"\n' +
-    '- Geen coaching, geen advies, geen conclusies\n' +
-    '- Geen "je moet", "je bent iemand die", "dit betekent dat"\n' +
-    '- Sluit af met één zachte zin die richting geeft zonder druk\n\n' +
+    'DEEL 1 — REFLECTIE (max 2 zinnen)\n' +
+    'Wat zie je terug in de antwoorden?\n' +
+    'Concreet. Geen interpretatie. Geen psychologische analyse.\n' +
+    'Gebruik woorden als: "het lijkt", "misschien", "het voelt alsof"\n\n' +
 
-    'VERBODEN:\n' +
+    'DEEL 2 — RICHTING (max 2 zinnen)\n' +
+    'Waar lijkt dit heen te bewegen?\n' +
+    'Klein en open. Niet "dit moet je doen". Wel: "hier lijkt iets te zitten"\n\n' +
+
+    'DEEL 3 — EERSTE KLEINE STAP (exact 1 zin)\n' +
+    'Één concrete actie. Direct uitvoerbaar. Max 15 minuten.\n' +
+    'Altijd: één persoon OF één object (een werk, een zin, een idee)\n' +
+    'Nooit: abstracte stappen, meerdere opties, "denk na over"\n\n' +
+
+    'TOTALE LENGTE: maximaal 80 woorden\n\n' +
+
+    'FORMATTING:\n' +
+    '- Geen markdown (geen #, geen *, geen -)\n' +
+    '- Geen titels of headers\n' +
+    '- Gewone lopende tekst\n' +
+    '- Twee alinea-omscheidingen tussen de drie delen\n\n' +
+
+    'VERBODEN WOORDEN:\n' +
+    '"je moet", "je bent iemand die", "dit betekent dat"\n' +
     '"business", "product", "klant", "valideren", "pitch", "markt"\n\n' +
-
-    'LENGTE: maximaal 120 woorden\n\n' +
-
-    'TOON: warm, rustig, open — zoals iemand die goed luistert\n\n' +
 
     'ANTWOORDEN:\n' + ideeAnswers;
 
@@ -324,11 +344,12 @@ async function generateIdeeSummary() {
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
     document.getElementById('idee-summary-text').textContent =
-      data.content[0].text.trim();
+      stripMarkdown(data.content[0].text);
   } catch (err) {
     document.getElementById('idee-summary-text').textContent =
-      'Er lijkt iets te zitten in hoe jij dit ziet en uitlegt. ' +
-      'Niet als plan, maar als iets wat je voorzichtig kunt blijven verkennen.';
+      'Er lijkt iets te zitten in wat je hebt opgeschreven.\n\n' +
+      'Neem even de tijd om je antwoorden terug te lezen.\n\n' +
+      'Kies één antwoord dat het meest bij je bleef hangen en schrijf er één zin over op.';
   }
 
   goTo('s-isummary');
@@ -410,29 +431,16 @@ async function generateRefinementSummary() {
     .join('\n');
 
   const prompt =
-    'Je schrijft een warme reflectie na twee weken dagelijkse antwoorden.\n\n' +
-
-    'DIT IS FASE 2. De gebruiker heeft al een eerste richting (Sprint 1).\n' +
-    'Sprint 2 ging dieper: wat zien anderen, waarom is het moeilijk,\n' +
-    'wat zou jij anders doen.\n\n' +
-
-    'Dag 10 is bijzonder belangrijk: "niet wat ze zeggen maar wat ze bedoelen."\n' +
-    'Gebruik dat antwoord als ankerpunt als het concreet was.\n\n' +
-
-    'JOUW TAAK:\n' +
-    '- Iets concreter dan fase 1, maar nog steeds open en voorzichtig\n' +
-    '- Toon: "dit begint ergens op te lijken" — niet "dit is wie jij bent"\n' +
-    '- Spiegelen eerst, daarna pas heel subtiel richting suggereren\n' +
-    '- Sluit af met één zachte zin dat dit in kleine stappen getest kan worden\n\n' +
-
-    'VERBODEN:\n' +
-    '"je bent iemand die...", "dit betekent dat...", "je moet..."\n' +
-    '"business", "product", "klant", "valideren", "ondernemen"\n\n' +
-
-    'LENGTE: maximaal 130 woorden\n\n' +
-
+    'Je bent een rustige spiegel. Geen coach, geen adviseur.\n\n' +
+    'Schrijf een reflectie in exact 3 onderdelen. Geen markdown. Geen bullets. Geen koppen.\n' +
+    'Alleen doorlopende tekst. Maximaal 80 woorden totaal.\n\n' +
     'SPRINT 1 antwoorden (dag 1–7):\n' + sprint1 + '\n\n' +
-    'SPRINT 2 antwoorden (dag 8–14):\n' + sprint2;
+    'SPRINT 2 antwoorden (dag 8–14):\n' + sprint2 + '\n\n' +
+    'Deel 1 — Reflectie (wat je terugziet in de antwoorden, gebruik hun eigen woorden)\n' +
+    'Deel 2 — Richting (wat er voorzichtig begint op te lijken, geen conclusies)\n' +
+    'Deel 3 — Actie (één kleine concrete stap die morgen past, geen druk)\n\n' +
+    'Verboden: "je moet", "je zou", "product", "klant", "valideren", "business", "ondernemen", markdown-tekens.\n' +
+    'Begin direct. Geen inleiding.';
 
   try {
     const res = await fetch('/api/nudge', {
@@ -440,19 +448,17 @@ async function generateRefinementSummary() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 400,
+        max_tokens: 350,
         messages: [{ role: 'user', content: prompt }]
       })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
     document.getElementById('refinement-summary-text').textContent =
-      data.content[0].text.trim();
+      stripMarkdown(data.content[0].text);
   } catch (err) {
     document.getElementById('refinement-summary-text').textContent =
-      'Na twee weken zie je iets concreter worden. ' +
-      'Lees je antwoorden terug — er zit meer richting in dan je denkt. ' +
-      'Je hoeft het nog niet scherp te hebben.';
+      'Na twee weken zie je iets concreter worden. Lees je antwoorden terug — de richting zit er al in. Kies één ding dat je deze week klein kunt uitproberen.';
   }
 
   goTo('s-rsummary');
