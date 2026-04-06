@@ -414,6 +414,48 @@ textarea::placeholder { color: var(--hint); }
   line-height: 1.55;
 }
 
+/* ─── Helper tekst ──────────────────────────── */
+.helper {
+  font-size: 13px;
+  color: var(--hint);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── Next intro ────────────────────────────── */
+.next-intro {
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* ─── Primary choice ────────────────────────── */
+.choice-primary {
+  border-color: var(--ink);
+  background: var(--lift);
+}
+
+/* ─── Ghost green button ─────────────────────── */
+.btn-ghost-green {
+  background: transparent;
+  color: var(--green);
+  border: 0.5px solid var(--green);
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--r);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-ghost-green:active { transform: scale(0.98); }
+.btn-ghost-green:disabled { opacity: 0.4; }
+
 /* ─── Brugzin ───────────────────────────────── */
 .bridge {
   font-size: 13px;

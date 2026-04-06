@@ -38,61 +38,66 @@
 
   <div class="screen" id="s1">
     <div class="day-label">Dag 1 van 7</div>
-    <div class="q">Waar praat je makkelijk over — ook als niemand erom vraagt?</div>
-    <textarea id="a1" rows="4" placeholder="Schrijf gewoon wat er opkomt. Niet perfect." oninput="chk('a1','b1')"></textarea>
-    <p class="opt-note">Denk niet te lang na. Wat komt er als eerste op?</p>
+    <div class="q">Waar merk je dat je makkelijk over praat — of over na blijft denken?</div>
+    <p class="helper">Het hoeft niet belangrijk te zijn. Juist de kleine dingen tellen.</p>
+    <textarea id="a1" rows="4" placeholder="Schrijf wat er in je opkomt…" oninput="chk('a1','b1')"></textarea>
     <button class="btn btn-dark" id="b1" onclick="saveDay(1)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s2">
     <div class="day-label">Dag 2 van 7</div>
-    <p class="bridge">Gisteren keek je naar waar je energie zit.</p>
-    <div class="q">Wanneer vroeg iemand jou voor het laatst om hulp? <span class="q-soft">Waar ging dat over?</span></div>
-    <textarea id="a2" rows="4" placeholder="Het hoeft niet recent te zijn." oninput="chk('a2','b2')"></textarea>
+    <p class="bridge">Gisteren koos je iets dat blijkbaar blijft terugkomen.</p>
+    <div class="q">Als je hier iets langer bij stilstaat — wat maakt dit interessant voor jou?</div>
+    <p class="helper">Eén reden is genoeg.</p>
+    <textarea id="a2" rows="4" placeholder="Wat maakt dit de moeite waard voor jou?" oninput="chk('a2','b2')"></textarea>
     <button class="btn btn-dark" id="b2" onclick="saveDay(2)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s3">
     <div class="day-label">Dag 3 van 7</div>
-    <p class="bridge">Je noemde gisteren iemand die dit herkent.</p>
-    <div class="q">Wat doe jij hierin op jouw manier?</div>
-    <textarea id="a3" rows="4" placeholder="Geen grote claim nodig. Gewoon eerlijk." oninput="chk('a3','b3')"></textarea>
-    <p class="opt-note">Iets kleins is genoeg.</p>
+    <p class="bridge">Er zit blijkbaar iets in dit onderwerp dat je raakt.</p>
+    <div class="q">Wie is iemand die dit ook herkent — of hier iets aan zou kunnen hebben?</div>
+    <p class="helper">Eén persoon is genoeg. Echt of denkbeeldig.</p>
+    <textarea id="a3" rows="4" placeholder="Wie komt er als eerste in je op?" oninput="chk('a3','b3')"></textarea>
     <button class="btn btn-dark" id="b3" onclick="saveDay(3)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s4">
     <div class="day-label">Dag 4 van 7</div>
-    <p class="bridge">Je zag gisteren een situatie voor je.</p>
-    <div class="q">Stel: iemand zit hiermee vast. <span class="q-soft">Wat zeg jij als eerste?</span></div>
-    <textarea id="a4" rows="4" placeholder="Schrijf het op zoals je het zou zeggen." oninput="chk('a4','b4')"></textarea>
+    <p class="bridge">Stel dat dit ergens toe zou kunnen leiden.</p>
+    <div class="q">Als je dit klein maakt — wat zou je hiermee kunnen doen?</div>
+    <p class="helper">Denk klein. Echt klein.</p>
+    <textarea id="a4" rows="4" placeholder="Wat is de simpelste vorm die je ziet?" oninput="chk('a4','b4')"></textarea>
     <button class="btn btn-dark" id="b4" onclick="saveDay(4)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s5">
     <div class="day-label">Dag 5 van 7</div>
-    <p class="bridge">Gisteren dacht je na over een eerste vorm.</p>
-    <div class="q">Schrijf één zin zoals je het aan één persoon zou uitleggen.</div>
-    <textarea id="a5" rows="3" placeholder="Niet perfect. Gewoon een eerste poging." oninput="chk('a5','b5')"></textarea>
-    <p class="opt-note">Eén zin. Meer hoeft niet.</p>
+    <p class="bridge">Je hebt nu iets dat een vorm begint te krijgen.</p>
+    <div class="q">Wat is één kleine stap die je hiermee zou kunnen zetten?</div>
+    <p class="helper">Het kleinste wat je kunt bedenken — ook als het nog niet voelt als een stap.</p>
+    <textarea id="a5" rows="3" placeholder="Wat zou je vandaag kunnen doen?" oninput="chk('a5','b5')"></textarea>
     <button class="btn btn-dark" id="b5" onclick="saveDay(5)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s6">
     <div class="day-label">Dag 6 van 7</div>
-    <p class="bridge">Gisteren schreef je een eerste zin.</p>
-    <div class="q">Voor wie zou dit behulpzaam kunnen zijn? <span class="q-soft">Noem één persoon.</span></div>
-    <textarea id="a6" rows="3" placeholder="Iemand die je kent, of iemand die je voor je ziet." oninput="chk('a6','b6')"></textarea>
+    <p class="bridge">Vaak zit er vlak voor beweging iets wat tegenhoudt.</p>
+    <div class="q">Wat maakt dit nog een beetje spannend of lastig?</div>
+    <p class="helper">Je hoeft het niet op te lossen. Alleen herkennen.</p>
+    <textarea id="a6" rows="3" placeholder="Wat merk je bij jezelf?" oninput="chk('a6','b6')"></textarea>
     <button class="btn btn-dark" id="b6" onclick="saveDay(6)" disabled>Afronden →</button>
   </div>
 
   <div class="screen" id="s7">
     <div class="day-label">Dag 7 van 7</div>
-    <p class="bridge">Je bent al zes dagen bezig.</p>
-    <div class="q">Als het oké voelt: stuur die zin naar die persoon.</div>
-    <textarea id="a7" rows="4" placeholder="Je kunt hem hier eerst opschrijven. Sturen mag. Niet sturen is ook goed." oninput="chk('a7','b7')"></textarea>
-    <p class="opt-note">Schrijven helpt. Sturen mag.</p>
+    <p class="bridge">Je hebt nu iets dat van jou is.</p>
+    <div class="q">Als je dit in één zin zou delen met iemand — wat zou je zeggen?</div>
+    <p class="helper">Je hoeft het niet te versturen. Alleen formuleren is genoeg.</p>
+    <textarea id="a7" rows="4" placeholder="Schrijf de zin zoals je hem zou zeggen…" oninput="chk('a7','b7'); updateDay7Share();"></textarea>
+    <p class="opt-note">Schrijven is genoeg. Sturen mag.</p>
     <button class="btn btn-dark" id="b7" onclick="generateSummary()" disabled>Afronden →</button>
+    <button class="btn btn-ghost-green" id="btn-share-day7" style="display:none;" onclick="markAsShared()">Ik wil dit delen →</button>
   </div>
 
   <!-- S8: Loading samenvatting -->
@@ -115,19 +120,19 @@
     <p class="summary-note">Niets hiervan hoeft vast te staan.</p>
     <div class="summary-text" id="summary-text">—</div>
     <hr class="divider">
-    <div class="next-label">Wat wil je nu?</div>
-    <div class="choice-btn" onclick="goTo(10)">
-      <div class="choice-icon">◎</div>
-      <div>
-        <div class="choice-title">Dit nog scherper krijgen</div>
-        <div class="choice-desc">Nog een week vragen. Dieper, maar nog steeds licht.</div>
-      </div>
-    </div>
-    <div class="choice-btn" onclick="goTo(11)">
+    <p class="next-intro">Wil je dit iets scherper maken?</p>
+    <div class="choice-btn choice-primary" onclick="startRefinementSprint()">
       <div class="choice-icon">→</div>
       <div>
-        <div class="choice-title">Hier iets mee proberen</div>
-        <div class="choice-desc">Kleine acties. Eén per dag. Geen grote stappen.</div>
+        <div class="choice-title">Ja, laten we dit verder uitwerken</div>
+        <div class="choice-desc">Nog zeven dagen. Eén vraag per dag. Iets concreter.</div>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="goTo('s-actie')" style="margin-top: 8px;">
+      <div class="choice-icon">○</div>
+      <div>
+        <div class="choice-title">Dit is voor nu genoeg</div>
+        <div class="choice-desc">Je kunt altijd terugkomen.</div>
       </div>
     </div>
   </div>

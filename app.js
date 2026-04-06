@@ -19,32 +19,32 @@ function stripMarkdown(text) {
 // ─── Vraagvarianten ──────────────────────────────────────────────────────────
 const orientatieVariants = {
   1: [
-    'Waar praat je makkelijk over — ook als niemand erom vraagt?',
-    'Waar word je enthousiast van als het ter sprake komt?'
+    'Waar merk je dat je makkelijk over praat — of over na blijft denken?',
+    'Waar word je vanzelf enthousiast van als het ter sprake komt?'
   ],
   2: [
-    'Wanneer vroeg iemand jou voor het laatst om hulp? Waar ging dat over?',
-    'Wie vraagt jou weleens om advies of om mee te denken?'
+    'Als je hier iets langer bij stilstaat — wat maakt dit interessant voor jou?',
+    'Wat maakt dat dit onderwerp je blijft bezighouden?'
   ],
   3: [
-    'Wat doe jij hierin op jouw manier?',
-    'Hoe pak jij dit aan — anders dan de meeste mensen?'
+    'Wie is iemand die dit ook herkent — of hier iets aan zou kunnen hebben?',
+    'Als jij dit aan iemand zou vertellen — wie schiet er dan in je op?'
   ],
   4: [
-    'Stel: iemand zit hiermee vast. Wat zeg jij als eerste?',
-    'Als een vriend je hierover belde — wat zou je zeggen?'
+    'Als je dit klein maakt — wat zou je hiermee kunnen doen?',
+    'Hoe zou dit er in zijn simpelste vorm uitzien?'
   ],
   5: [
-    'Schrijf één zin zoals je het aan één persoon zou uitleggen.',
-    'Hoe zou je dit uitleggen aan iemand die er niks van weet?'
+    'Wat is één kleine stap die je hiermee zou kunnen zetten?',
+    'Als je één ding zou doen — hoe klein ook — wat zou dat zijn?'
   ],
   6: [
-    'Voor wie zou dit behulpzaam kunnen zijn? Noem één persoon.',
-    'Wie schiet er bij jou te binnen als je hieraan denkt?'
+    'Wat maakt dit nog een beetje spannend of lastig?',
+    'Wat houdt je nog een beetje tegen — ook als het maar klein is?'
   ],
   7: [
-    'Als het oké voelt: stuur die zin naar die persoon.',
-    'Wat zou je willen dat iemand anders hierover weet?'
+    'Als je dit in één zin zou delen met iemand — wat zou je zeggen?',
+    'Hoe zou je dit uitleggen aan iemand die je vertrouwt?'
   ]
 };
 
@@ -78,6 +78,25 @@ const ideeVariants = {
     'Hoe voelde het om dit de afgelopen dagen te verkennen?'
   ]
 };
+
+function updateDay7Share() {
+  const shareBtn = document.getElementById('btn-share-day7');
+  if (shareBtn) {
+    shareBtn.style.display =
+      document.getElementById('a7').value.trim().length >= 5
+      ? 'block' : 'none';
+  }
+}
+
+function markAsShared() {
+  answers['dag7_shared'] = true;
+  save('answers', answers);
+  const btn = document.getElementById('btn-share-day7');
+  if (btn) {
+    btn.textContent = 'Genoteerd \u2713';
+    btn.disabled = true;
+  }
+}
 
 function setRandomVariant(screenId, variants, dayNum) {
   const screen = document.getElementById(screenId);
@@ -272,47 +291,40 @@ async function generateSummary() {
     .join('\n');
 
   const prompt =
-    'Je schrijft een korte, warme reflectie. Drie delen. Vloeiende tekst.\n\n' +
+    'Je schrijft een korte, warme reflectie na 7 dagen. Drie delen. Vloeiende tekst.\n\n' +
 
-    'DEEL 1 — REFLECTIE (max 2 zinnen)\n' +
-    'Wat zie je terug in de antwoorden?\n' +
-    'Concreet. Geen interpretatie. Geen psychologische analyse.\n' +
-    'Gebruik woorden als: "het lijkt", "misschien", "het voelt alsof"\n\n' +
+    'De gebruiker doorliep deze vragen:\n' +
+    '- Dag 1: waar ze makkelijk over praten\n' +
+    '- Dag 2: wat dat interessant maakt voor hen\n' +
+    '- Dag 3: wie dit herkent\n' +
+    '- Dag 4: een eerste simpele vorm\n' +
+    '- Dag 5: één kleine stap\n' +
+    '- Dag 6: wat het nog lastig maakt\n' +
+    '- Dag 7: één zin om te delen\n\n' +
 
-    'DEEL 2 — RICHTING (max 2 zinnen)\n' +
-    'Waar lijkt dit heen te bewegen?\n' +
-    'Klein en open. Niet "dit moet je doen". Wel: "hier lijkt iets te zitten"\n\n' +
+    'STRUCTUUR (altijd drie alineas):\n\n' +
 
-    'DEEL 3 — EERSTE KLEINE STAP (exact 1 zin)\n' +
+    'Alinea 1 — Reflectie (max 2 zinnen):\n' +
+    'Wat zie je terug? Gebruik hun eigen woorden.\n' +
+    'Gebruik: "het lijkt", "misschien", "het voelt alsof"\n\n' +
+
+    'Alinea 2 — Richting (max 2 zinnen):\n' +
+    'Waar lijkt dit heen te bewegen? Klein en open.\n' +
+    'Niet "dit moet je doen". Wel: "hier lijkt iets te zitten"\n\n' +
+
+    'Alinea 3 — Eerste stap (exact 1 zin):\n' +
     'Één concrete actie. Direct uitvoerbaar. Max 15 minuten.\n' +
-    'Geen voorbereiding nodig.\n' +
-    'Altijd: één persoon OF één object (een werk, een zin, een idee)\n' +
-    'Nooit: abstracte stappen, meerdere opties, "denk na over"\n\n' +
+    'Altijd: één persoon OF één object.\n' +
+    'NOOIT: abstracte stappen, "denk na over", meerdere opties.\n\n' +
 
     'TOTALE LENGTE: maximaal 80 woorden\n\n' +
 
-    'FORMATTING:\n' +
-    '- Geen markdown (geen #, geen *, geen -)\n' +
-    '- Geen titels of headers\n' +
-    '- Geen opsommingen\n' +
-    '- Gewone lopende tekst\n' +
-    '- Twee alinea-omscheidingen tussen de drie delen\n\n' +
+    'FORMATTING: geen markdown, geen headers, geen bullets\n\n' +
 
-    'VERBODEN WOORDEN:\n' +
-    '"je moet", "je bent iemand die", "dit betekent dat"\n' +
-    '"business", "product", "klant", "valideren", "pitch", "markt"\n' +
-    '"kijk eens wat", "ontdek", "verken"\n\n' +
+    'VERBODEN: "je moet", "je bent iemand die", "business",\n' +
+    '"product", "klant", "valideren", "pitch", "markt"\n\n' +
 
-    'VOORBEELD VAN DE JUISTE TOON EN LENGTE:\n' +
-    '"Je komt steeds terug bij het verlangen om je werk te laten zien — ' +
-    'niet alleen voor jezelf, maar omdat je voelt dat het iets kan betekenen voor anderen.\n\n' +
-    'Het lijkt minder te gaan om een grote stap, en meer om een moment waarop ' +
-    'iemand jouw werk ziet en er iets in herkent.\n\n' +
-    'Als je ergens klein begint, zou het dit kunnen zijn: kies één werk en laat ' +
-    'het aan één persoon zien, gewoon om te zien wat het oproept."\n\n' +
-
-    'ANTWOORDEN VAN DE GEBRUIKER:\n' +
-    context;
+    'ANTWOORDEN:\n' + context;
 
   try {
     const res = await fetch('/api/nudge', {
