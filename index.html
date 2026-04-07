@@ -305,6 +305,13 @@
         <div class="choice-desc">Kleine stappen naar buiten. Eén per dag.</div>
       </div>
     </div>
+    <div class="choice-btn" onclick="startW3Sprint()" style="margin-top: 8px;">
+      <div class="choice-icon">→</div>
+      <div>
+        <div class="choice-title">Eerste beweging naar buiten</div>
+        <div class="choice-desc">Zeven dagen. Klein beginnen. Eén stap tegelijk.</div>
+      </div>
+    </div>
   </div>
 
   <!-- Idee Sprint: Dag 1–7 -->
@@ -445,6 +452,129 @@
       Start Refinement Sprint →
     </button>
     <button class="btn btn-light" onclick="goTo('s-isummary')">← Terug</button>
+  </div>
+
+  <!-- Sprint 3: Eerste Beweging naar Buiten — Dag 15–21 -->
+  <div class="screen" id="s-w3-15">
+    <div class="day-label">Dag 15 van 21</div>
+    <p class="bridge">Dit is wat er nu begint te ontstaan.</p>
+    <div class="q">Wat voelt het meest simpel en kloppend om mee te beginnen?</div>
+    <p class="helper">Geen goed of fout antwoord. Wat trekt jou?</p>
+    <textarea id="w3d15" rows="4"
+      placeholder="Schrijf wat als eerste opkomt…"
+      oninput="chk('w3d15','w3b15')"></textarea>
+    <button class="btn btn-dark" id="w3b15"
+      onclick="saveW3Day(15)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-w3-16">
+    <div class="day-label">Dag 16 van 21</div>
+    <p class="bridge">Gisteren voelde je wat het meest kloppend aanvoelt.</p>
+    <div class="q">Hoe zou dit eruitzien als je het alleen voor één persoon doet?</div>
+    <p class="helper">Niet voor iedereen. Niet perfect. Gewoon voor één.</p>
+    <textarea id="w3d16" rows="4"
+      placeholder="Wat zie je voor je?"
+      oninput="chk('w3d16','w3b16')"></textarea>
+    <button class="btn btn-dark" id="w3b16"
+      onclick="saveW3Day(16)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-w3-17">
+    <div class="day-label">Dag 17 van 21</div>
+    <p class="bridge">Je hebt nu een beeld van hoe dit eruit zou kunnen zien.</p>
+    <div class="q">Wat is een manier om dit met iemand te delen zonder dat het spannend voelt?</div>
+    <p class="helper">Denk klein. Zelfs één zin is genoeg.</p>
+    <textarea id="w3d17" rows="4"
+      placeholder="Hoe zou je dit kunnen aanraken?"
+      oninput="chk('w3d17','w3b17')"></textarea>
+    <button class="btn btn-dark" id="w3b17"
+      onclick="saveW3Day(17)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-w3-18">
+    <div class="day-label">Dag 18 van 21</div>
+    <p class="bridge">Je ziet nu hoe je dit zou kunnen aanraken.</p>
+    <div class="q">Als je dit zou delen — wat zou je letterlijk zeggen?</div>
+    <p class="helper">Schrijf het op zoals het zou klinken. Niet mooi. Gewoon echt.</p>
+    <textarea id="w3d18" rows="4"
+      placeholder="Schrijf de woorden die je zou gebruiken…"
+      oninput="chk('w3d18','w3b18')"></textarea>
+    <button class="btn btn-dark" id="w3b18"
+      onclick="saveW3Day(18)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-w3-19">
+    <div class="day-label">Dag 19 van 21</div>
+    <p class="bridge">Je hebt nu woorden voor wat je wilt zeggen.</p>
+    <div class="q">Wat doe je vandaag — hoe klein ook?</div>
+    <p class="helper">Het mag echt klein zijn. Het gaat er alleen om dat je het doet.</p>
+    <textarea id="w3d19" rows="4"
+      placeholder="Wat ga je doen?"
+      oninput="chk('w3d19','w3b19')"></textarea>
+    <button class="btn btn-dark" id="w3b19"
+      onclick="saveW3Day(19)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-w3-20">
+    <div class="day-label">Dag 20 van 21</div>
+    <p class="bridge">Gisteren zette je een stap — hoe klein ook.</p>
+    <div class="q">Wat merkte je toen je dit probeerde — of erover nadacht?</div>
+    <p class="helper">Ook als er niks gebeurde is dit een goed antwoord.</p>
+    <textarea id="w3d20" rows="4"
+      placeholder="Wat viel je op?"
+      oninput="chk('w3d20','w3b20')"></textarea>
+    <button class="btn btn-dark" id="w3b20"
+      onclick="saveW3Day(20)" disabled>Afronden →</button>
+  </div>
+
+  <div class="screen" id="s-w3-21">
+    <div class="day-label">Dag 21 van 21</div>
+    <p class="bridge">Je hebt dit nu een eerste keer aangeraakt.</p>
+    <div class="q">Wil je dit nog een keer proberen — of iets kleins aanpassen?</div>
+    <p class="helper">Beide zijn goed. Er is geen verkeerd antwoord.</p>
+    <textarea id="w3d21" rows="4"
+      placeholder="Wat voelt als de volgende stap?"
+      oninput="chk('w3d21','w3b21')"></textarea>
+    <p class="opt-note">Herhalen mag. Aanpassen mag. Beide zijn beweging.</p>
+    <button class="btn btn-dark" id="w3b21"
+      onclick="generateW3Summary()" disabled>Afronden →</button>
+  </div>
+
+  <!-- Sprint 3 Loading -->
+  <div class="screen" id="s-w3-loading">
+    <div class="loading-wrap">
+      <div class="day-label">Even geduld</div>
+      <div class="loading-q">We kijken wat er in drie weken is ontstaan.</div>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sprint 3 Summary -->
+  <div class="screen" id="s-w3-summary">
+    <div class="summary-tag">Na 21 dagen</div>
+    <div class="summary-intro">Je hebt dit naar buiten gebracht.</div>
+    <p class="summary-note">Niets hiervan hoeft vast te staan.</p>
+    <div class="summary-text" id="w3-summary-text">—</div>
+    <hr class="divider">
+    <div class="next-label">Wat wil je nu?</div>
+    <div class="choice-btn choice-primary" onclick="alert('Sprint 4 — komt in de volgende versie!')">
+      <div class="choice-icon">→</div>
+      <div>
+        <div class="choice-title">Nog een ronde</div>
+        <div class="choice-desc">Herhalen of iets aanpassen. Eén stap per dag.</div>
+      </div>
+    </div>
+    <div class="choice-btn" onclick="goTo('s0')" style="margin-top: 8px;">
+      <div class="choice-icon">○</div>
+      <div>
+        <div class="choice-title">Dit is voor nu genoeg</div>
+        <div class="choice-desc">Je kunt altijd terugkomen.</div>
+      </div>
+    </div>
   </div>
 
   <!-- Actie Sprint teaser (vanuit Refinement) -->

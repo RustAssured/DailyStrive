@@ -274,6 +274,19 @@ function renderLog() {
     ).join('');
   }
 
+  const w3Answers = Object.entries(all)
+    .filter(([k]) => k.startsWith('w3d'));
+
+  if (w3Answers.length > 0) {
+    html += '<div class="log-label" style="margin:1rem 0 0.75rem;">Sprint 3</div>';
+    html += w3Answers.map(([k, v]) =>
+      '<div class="log-entry">' +
+        '<div class="log-label">Dag ' + k.replace('w3d', '') + '</div>' +
+        '<div class="log-text">' + v + '</div>' +
+      '</div>'
+    ).join('');
+  }
+
   logEl.innerHTML = html;
 }
 
@@ -595,6 +608,143 @@ async function generateRefinementSummary() {
   }
 
   goTo('s-rsummary');
+}
+
+// ─── Sprint 3: Eerste Beweging ────────────────────────────────────────────────
+
+const w3DayToScreen = {
+  15: 's-w3-15', 16: 's-w3-16', 17: 's-w3-17', 18: 's-w3-18',
+  19: 's-w3-19', 20: 's-w3-20', 21: 's-w3-21'
+};
+
+function startW3Sprint() {
+  updateW3Progress(15);
+  goTo('s-w3-15');
+}
+
+function updateW3Progress(dayNum) {
+  const prog = document.getElementById('prog');
+  prog.style.display = 'flex';
+  prog.innerHTML = '';
+  for (let i = 15; i <= 21; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'prog-seg' +
+      (i < dayNum ? ' done' : i === dayNum ? ' active' : '');
+    prog.appendChild(seg);
+  }
+}
+
+function saveW3Day(n) {
+  const val = document.getElementById('w3d' + n).value.trim();
+  answers['w3d' + n] = val;
+  save('answers', answers);
+
+  document.getElementById('done-title').textContent = 'Dag ' + n + ' afgerond.';
+  document.getElementById('done-sub').textContent =
+    'Er wacht een volgende stap, wanneer jij er klaar voor bent.';
+
+  const nextDayWrap = document.getElementById('next-day-wrap');
+  const btnNext = document.getElementById('btn-next-day');
+
+  if (n < 21) {
+    nextDayNumber = n + 1;
+    nextDayWrap.style.display = 'block';
+    btnNext.onclick = function() {
+      const nextScreen = w3DayToScreen[nextDayNumber];
+      if (nextScreen) {
+        updateW3Progress(nextDayNumber);
+        goTo(nextScreen);
+      }
+    };
+  } else {
+    nextDayWrap.style.display = 'none';
+  }
+
+  renderLog();
+  goTo(12);
+}
+
+async function generateW3Summary() {
+  const val = document.getElementById('w3d21').value.trim();
+  answers['w3d21'] = val;
+  save('answers', answers);
+  goTo('s-w3-loading');
+
+  const all = load('answers') || {};
+
+  const w3Answers = Object.entries(all)
+    .filter(([k]) => k.startsWith('w3d'))
+    .map(([k, v]) => 'Dag ' + k.replace('w3d', '') + ': "' + v + '"')
+    .join('\n');
+
+  const allPrevious = Object.entries(all)
+    .filter(([k]) => !k.startsWith('w3d'))
+    .map(([k, v]) => k + ': "' + v + '"')
+    .join('\n');
+
+  const prompt =
+    'Je schrijft een korte, warme reflectie na drie weken.\n\n' +
+
+    'De gebruiker heeft de eerste twee weken richting gevonden en verfijnd.\n' +
+    'In week 3 maakten ze voor het eerst contact met de werkelijkheid:\n' +
+    '- Ze verkenden hoe het eruit zou zien voor één persoon\n' +
+    '- Ze formuleerden wat ze zouden zeggen\n' +
+    '- Ze zetten een eerste stap — hoe klein ook\n' +
+    '- Ze reflecteerden op hoe dat voelde\n' +
+    '- Ze kozen of ze willen herhalen of aanpassen\n\n' +
+
+    'BELANGRIJK VOOR DEZE SAMENVATTING:\n' +
+    '- Erken expliciet dat dit spannend of onwennig kon voelen\n' +
+    '- Normaliseer weerstand — dat is niet falen, dat is bewegen\n' +
+    '- Benoem wat er is gebeurd zonder het te beoordelen\n\n' +
+
+    'STRUCTUUR (drie alineas):\n\n' +
+
+    'Alinea 1 — Wat er is gebeurd (max 2 zinnen):\n' +
+    'Concreet. Gebruik hun eigen woorden.\n' +
+    'Gebruik: "het lijkt", "je hebt", "je raakte"\n\n' +
+
+    'Alinea 2 — Weerstand erkennen (max 2 zinnen):\n' +
+    'Benoem dat het onwennig kon voelen als dat relevant is.\n' +
+    'Voorbeeld: "Je hebt dit aangeraakt — ook al voelde het misschien onwennig. Dat is precies genoeg."\n\n' +
+
+    'Alinea 3 — Eerste stap (exact 1 zin):\n' +
+    'Eén kleine herhaling of variatie. Direct uitvoerbaar.\n' +
+    'Nooit: groter maken, pitch, klanten, validatie.\n\n' +
+
+    'TOTALE LENGTE: maximaal 90 woorden\n\n' +
+
+    'FORMATTING: geen markdown, geen headers, geen bullets\n\n' +
+
+    'VERBODEN: "je moet", "je bent iemand die", "business",\n' +
+    '"klant", "valideren", "pitch", "LinkedIn", "markt"\n\n' +
+
+    'WEEK 3 ANTWOORDEN:\n' + w3Answers + '\n\n' +
+    'EERDERE WEKEN (ter context):\n' + allPrevious;
+
+  try {
+    const res = await fetch('/api/nudge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    document.getElementById('w3-summary-text').textContent =
+      stripMarkdown(data.content[0].text.trim());
+  } catch (err) {
+    document.getElementById('w3-summary-text').textContent =
+      'Je hebt dit aangeraakt — ook al voelde het misschien onwennig. ' +
+      'Dat is precies genoeg.\n\n' +
+      'De volgende stap is simpel: doe het nog één keer, ' +
+      'of pas één klein ding aan.';
+  }
+
+  goTo('s-w3-summary');
 }
 
 // ─── Storage helpers ──────────────────────────────────────────────────────────
