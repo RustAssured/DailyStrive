@@ -304,38 +304,38 @@ async function generateSummary() {
     .join('\n');
 
   const prompt =
-    'Je schrijft een korte, warme reflectie na 7 dagen. Drie delen. Vloeiende tekst.\n\n' +
+    'Je schrijft een korte, warme reflectie na 7 dagen. Drie alineas. Vloeiende tekst.\n\n' +
 
-    'De gebruiker doorliep deze vragen:\n' +
-    '- Dag 1: waar ze makkelijk over praten\n' +
-    '- Dag 2: wat dat interessant maakt voor hen\n' +
-    '- Dag 3: wie dit herkent\n' +
-    '- Dag 4: een eerste simpele vorm\n' +
-    '- Dag 5: één kleine stap\n' +
-    '- Dag 6: wat het nog lastig maakt\n' +
-    '- Dag 7: één zin om te delen\n\n' +
+    'BELANGRIJK ONDERSCHEID:\n' +
+    'Je spiegelt — je instrueert niet.\n' +
+    'Je beschrijft wat er is, niet wat iemand moet doen.\n' +
+    'De keuze blijft altijd bij de gebruiker.\n\n' +
 
-    'STRUCTUUR (altijd drie alineas):\n\n' +
-
-    'Alinea 1 — Reflectie (max 2 zinnen):\n' +
-    'Wat zie je terug? Gebruik hun eigen woorden.\n' +
+    'ALINEA 1 — Reflectie (max 2 zinnen):\n' +
+    'Wat zie je terug in de antwoorden?\n' +
+    'Gebruik hun eigen woorden. Geen interpretatie.\n' +
     'Gebruik: "het lijkt", "misschien", "het voelt alsof"\n\n' +
 
-    'Alinea 2 — Richting (max 2 zinnen):\n' +
+    'ALINEA 2 — Richting (max 2 zinnen):\n' +
     'Waar lijkt dit heen te bewegen? Klein en open.\n' +
     'Niet "dit moet je doen". Wel: "hier lijkt iets te zitten"\n\n' +
 
-    'Alinea 3 — Eerste stap (exact 1 zin):\n' +
-    'Één concrete actie. Direct uitvoerbaar. Max 15 minuten.\n' +
-    'Altijd: één persoon OF één object.\n' +
-    'NOOIT: abstracte stappen, "denk na over", meerdere opties.\n\n' +
+    'ALINEA 3 — Spiegel (exact 1 zin):\n' +
+    'Geen instructie. Geen "ga dit doen".\n' +
+    'Reflecteer wat er al is — en laat de volgende stap open.\n' +
+    'Voorbeeld van de juiste toon:\n' +
+    '"Misschien zit het niet in het idee zelf, maar in wat er ' +
+    'gebeurt als je het doet — dat lijkt iets wat je opnieuw ' +
+    'zou kunnen opzoeken, op jouw manier."\n\n' +
 
     'TOTALE LENGTE: maximaal 80 woorden\n\n' +
 
     'FORMATTING: geen markdown, geen headers, geen bullets\n\n' +
 
-    'VERBODEN: "je moet", "je bent iemand die", "business",\n' +
-    '"product", "klant", "valideren", "pitch", "markt"\n\n' +
+    'VERBODEN:\n' +
+    '"je moet", "ga dit doen", "neem", "stuur", "bel", "maak"\n' +
+    '"je bent iemand die", "dit betekent dat"\n' +
+    '"business", "product", "klant", "valideren", "pitch"\n\n' +
 
     'ANTWOORDEN:\n' + context;
 
@@ -577,16 +577,37 @@ async function generateRefinementSummary() {
     .join('\n');
 
   const prompt =
-    'Je bent een rustige spiegel. Geen coach, geen adviseur.\n\n' +
-    'Schrijf een reflectie in exact 3 onderdelen. Geen markdown. Geen bullets. Geen koppen.\n' +
-    'Alleen doorlopende tekst. Maximaal 80 woorden totaal.\n\n' +
+    'Je schrijft een warme reflectie na twee weken. Drie alineas. Vloeiende tekst.\n\n' +
+
+    'DIT IS FASE 2. De gebruiker heeft al een eerste richting.\n' +
+    'De samenvatting mag iets concreter zijn dan fase 1.\n' +
+    'Maar blijft spiegelen — instrueert niet.\n\n' +
+
+    'ALINEA 1 — Wat er is ontstaan (max 2 zinnen):\n' +
+    'Concreter dan fase 1. Gebruik dag 10 als ankerpunt als dat antwoord sterk was.\n' +
+    'Toon: "dit begint ergens op te lijken"\n\n' +
+
+    'ALINEA 2 — Waar het naartoe beweegt (max 2 zinnen):\n' +
+    'Subtiel specifieker dan fase 1.\n' +
+    'Nog steeds open. Nog steeds voorzichtig.\n\n' +
+
+    'ALINEA 3 — Spiegel (exact 1 zin):\n' +
+    'Geen instructie. Geen "ga dit doen".\n' +
+    'Sluit af met een zachte observatie die uitnodigt zonder te duwen.\n' +
+    'Voorbeeld:\n' +
+    '"Misschien is de volgende stap niet groter worden — maar ' +
+    'concreter worden, op de manier die bij jou past."\n\n' +
+
+    'TOTALE LENGTE: maximaal 90 woorden\n\n' +
+
+    'FORMATTING: geen markdown, geen headers, geen bullets\n\n' +
+
+    'VERBODEN:\n' +
+    '"je moet", "ga dit doen", "neem", "stuur", "bel", "maak"\n' +
+    '"business", "product", "klant", "valideren", "pitch"\n\n' +
+
     'SPRINT 1 antwoorden (dag 1–7):\n' + sprint1 + '\n\n' +
-    'SPRINT 2 antwoorden (dag 8–14):\n' + sprint2 + '\n\n' +
-    'Deel 1 — Reflectie (wat je terugziet in de antwoorden, gebruik hun eigen woorden)\n' +
-    'Deel 2 — Richting (wat er voorzichtig begint op te lijken, geen conclusies)\n' +
-    'Deel 3 — Actie (één kleine concrete stap die morgen past, geen druk)\n\n' +
-    'Verboden: "je moet", "je zou", "product", "klant", "valideren", "business", "ondernemen", markdown-tekens.\n' +
-    'Begin direct. Geen inleiding.';
+    'SPRINT 2 antwoorden (dag 8–14):\n' + sprint2;
 
   try {
     const res = await fetch('/api/nudge', {
@@ -683,41 +704,45 @@ async function generateW3Summary() {
     .join('\n');
 
   const prompt =
-    'Je schrijft een korte, warme reflectie na drie weken.\n\n' +
+    'Je schrijft een korte, warme reflectie na drie weken. Drie alineas.\n\n' +
 
-    'De gebruiker heeft de eerste twee weken richting gevonden en verfijnd.\n' +
-    'In week 3 maakten ze voor het eerst contact met de werkelijkheid:\n' +
-    '- Ze verkenden hoe het eruit zou zien voor één persoon\n' +
-    '- Ze formuleerden wat ze zouden zeggen\n' +
-    '- Ze zetten een eerste stap — hoe klein ook\n' +
-    '- Ze reflecteerden op hoe dat voelde\n' +
-    '- Ze kozen of ze willen herhalen of aanpassen\n\n' +
+    'De gebruiker heeft voor het eerst contact gemaakt met de werkelijkheid.\n' +
+    'Ze hebben iets gedaan — hoe klein ook.\n' +
+    'Misschien voelde het awkward. Misschien grappig. Misschien allebei.\n\n' +
 
-    'BELANGRIJK VOOR DEZE SAMENVATTING:\n' +
-    '- Erken expliciet dat dit spannend of onwennig kon voelen\n' +
-    '- Normaliseer weerstand — dat is niet falen, dat is bewegen\n' +
-    '- Benoem wat er is gebeurd zonder het te beoordelen\n\n' +
+    'BELANGRIJK:\n' +
+    'Spiegelen wat er is gebeurd — niet instrueren wat ze moeten doen.\n' +
+    'Erken weerstand als die er was. Normaliseer het.\n' +
+    'Laat de volgende stap volledig open.\n\n' +
 
-    'STRUCTUUR (drie alineas):\n\n' +
-
-    'Alinea 1 — Wat er is gebeurd (max 2 zinnen):\n' +
+    'ALINEA 1 — Wat er is gedaan (max 2 zinnen):\n' +
     'Concreet. Gebruik hun eigen woorden.\n' +
-    'Gebruik: "het lijkt", "je hebt", "je raakte"\n\n' +
+    'Geen beoordeling — alleen beschrijving.\n\n' +
 
-    'Alinea 2 — Weerstand erkennen (max 2 zinnen):\n' +
-    'Benoem dat het onwennig kon voelen als dat relevant is.\n' +
-    'Voorbeeld: "Je hebt dit aangeraakt — ook al voelde het misschien onwennig. Dat is precies genoeg."\n\n' +
+    'ALINEA 2 — Weerstand erkennen (max 2 zinnen):\n' +
+    'Als het onwennig of awkward was — benoem dat expliciet.\n' +
+    'Normaliseer het: dat hoort erbij. Dat is niet falen.\n' +
+    'Voorbeeld: "Het voelde misschien onwennig — en dat mag. ' +
+    'Dat is precies hoe het voelt als iets nieuw is."\n\n' +
 
-    'Alinea 3 — Eerste stap (exact 1 zin):\n' +
-    'Eén kleine herhaling of variatie. Direct uitvoerbaar.\n' +
-    'Nooit: groter maken, pitch, klanten, validatie.\n\n' +
+    'ALINEA 3 — Open spiegel (exact 1 zin):\n' +
+    'GEEN instructie. GEEN "ga dit doen" of "neem nog een keer op".\n' +
+    'Reflecteer op wat er al is — laat de rest open.\n' +
+    'Goede voorbeelden:\n' +
+    '"Misschien zit het niet in het idee zelf, maar in wat er ' +
+    'gebeurt als je het doet — dat lijkt iets wat je opnieuw ' +
+    'zou kunnen opzoeken, op jouw manier."\n' +
+    '"Wat er is veranderd is niet het idee — maar de bereidheid ' +
+    'om het aan te raken."\n\n' +
 
     'TOTALE LENGTE: maximaal 90 woorden\n\n' +
 
     'FORMATTING: geen markdown, geen headers, geen bullets\n\n' +
 
-    'VERBODEN: "je moet", "je bent iemand die", "business",\n' +
-    '"klant", "valideren", "pitch", "LinkedIn", "markt"\n\n' +
+    'VERBODEN:\n' +
+    '"je moet", "ga dit doen", "neem", "stuur", "bel", "maak"\n' +
+    '"neem volgende week", "doe dit opnieuw", "probeer"\n' +
+    '"business", "product", "klant", "valideren", "pitch", "LinkedIn"\n\n' +
 
     'WEEK 3 ANTWOORDEN:\n' + w3Answers + '\n\n' +
     'EERDERE WEKEN (ter context):\n' + allPrevious;
